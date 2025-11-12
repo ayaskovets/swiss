@@ -1,0 +1,61 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "clang-release",
+            "displayName": "clang-release",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_FLAGS_INIT": "-Wall -Wextra -pedantic -Werror -O3 -fsanitize=address",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
+        },
+        {
+            "name": "clang-debug",
+            "displayName": "clang-debug",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_FLAGS_INIT": "-Wall -Wextra -pedantic -Werror -g -fsanitize=address",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug",
+            "displayName": "clang-debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release",
+            "displayName": "clang-release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug",
+            "displayName": "clang-debug",
+            "output": {
+                "verbosity": "verbose"
+            }
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release",
+            "displayName": "clang-release",
+            "output": {
+                "verbosity": "verbose"
+            }
+        }
+    ]
+}

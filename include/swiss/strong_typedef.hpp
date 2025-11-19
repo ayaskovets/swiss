@@ -1,5 +1,7 @@
 #pragma once
 
+// NOLINTNEXTLINE(unused-includes)
+#include <compare>
 #include <cstddef>
 #include <type_traits>
 

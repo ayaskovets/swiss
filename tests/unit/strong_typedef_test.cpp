@@ -23,6 +23,13 @@ TEST(strong_typedef, smoke) {
   EXPECT_EQ(ptr.use_count(), 1);
 }
 
+TEST(strong_typedef, user_defined_type) {
+  constexpr auto kValue = 42;
+
+  swiss::strong_typedef<class tag, int> const value(kValue);
+  EXPECT_EQ(*value, kValue);
+}
+
 TEST(strong_typedef, copy_constructor) {
   auto ptr = std::make_shared<int>(1);
   {

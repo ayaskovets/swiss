@@ -9,9 +9,10 @@
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_CXX_FLAGS_INIT": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "BUILD_TESTING": "ON"
+                "SWISS_CXX_FLAGS": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address",
+                "SWISS_LINKER_FLAGS": "-fsanitize=address",
+                "SWISS_BUILD_TESTING": "ON"
             }
         },
         {
@@ -22,9 +23,9 @@
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_CXX_FLAGS_INIT": "-O3",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "BUILD_TESTING": "OFF"
+                "SWISS_CXX_FLAGS": "-O3",
+                "SWISS_BUILD_TESTING": "OFF"
             }
         }
     ],

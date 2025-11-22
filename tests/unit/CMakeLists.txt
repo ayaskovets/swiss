@@ -9,6 +9,9 @@ if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
 endif()
 
+add_executable(swiss-unit-tests)
+add_executable(swiss::unit-tests ALIAS swiss-unit-tests)
+
 #-------------------------------------------------------------------------------
 # dependencies
 #-------------------------------------------------------------------------------
@@ -31,18 +34,19 @@ set(SOURCES
     strong_typedef_test.cpp
     unchecked_any_test.cpp
 )
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
 
 #-------------------------------------------------------------------------------
 # target
 #-------------------------------------------------------------------------------
 
-add_executable(${PROJECT_NAME})
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
-
-target_link_libraries(${PROJECT_NAME}
+target_sources(swiss-unit-tests PRIVATE ${SOURCES})
+target_link_libraries(swiss-unit-tests
     PRIVATE
     swiss::swiss
     GTest::gtest_main)
 
-gtest_discover_tests(${PROJECT_NAME})
+if(NOT PROJECT_IS_TOP_LEVEL)
+    target_link_options(swiss-unit-tests PRIVATE ${SWISS_LINKER_FLAGS})
+endif()
+
+gtest_discover_tests(swiss-unit-tests)

@@ -8,34 +8,54 @@ project(swiss VERSION 0.0.1 LANGUAGES CXX)
 include(GNUInstallDirs)
 include(CMakeDependentOption)
 
-cmake_dependent_option(SWISS_BUILD_TESTING "Build tests"
-    ON "BUILD_TESTING" OFF)
-cmake_dependent_option(SWISS_INSTALL "Generate target for install"
-    ON "PROJECT_IS_TOP_LEVEL;NOT CMAKE_SKIP_INSTALL_RULES" OFF)
+if(NOT DEFINED SWISS_BUILD_TESTING)
+    if(DEFINED BUILD_TESTING AND BUILD_TESTING)
+        set(SWISS_BUILD_TESTING ON CACHE BOOL "Build tests")
+    else()
+        set(SWISS_BUILD_TESTING OFF CACHE BOOL "Build tests")
+    endif()
+endif()
+
+if(NOT DEFINED SWISS_INSTALL)
+    if(PROJECT_IS_TOP_LEVEL AND NOT CMAKE_SKIP_INSTALL_RULES)
+        set(SWISS_INSTALL ${BUILD_TESTING} CACHE BOOL "Generate target for install")
+    else()
+        set(SWISS_INSTALL OFF CACHE BOOL "Generate target for install")
+    endif()
+endif()
+
+if(NOT DEFINED SWISS_CXX_FLAGS)
+    set(SWISS_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
+string(REPLACE " " ";" SWISS_CXX_FLAGS "${SWISS_CXX_FLAGS}")
+
+if(NOT DEFINED SWISS_LINKER_FLAGS)
+    set(SWISS_LINKER_FLAGS ${CMAKE_STATIC_LINKER_FLAGS})
+endif()
+string(REPLACE " " ";" SWISS_LINKER_FLAGS "${SWISS_LINKER_FLAGS}")
 
 if(NOT DEFINED SWISS_INSTALL_CMAKEDIR)
-    set(SWISS_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+    set(SWISS_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/swiss"
         CACHE STRING "Install path package-related CMake files")
 endif()
 
-add_library(${PROJECT_NAME} INTERFACE)
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(swiss INTERFACE)
+add_library(swiss::swiss ALIAS swiss)
 
 #-------------------------------------------------------------------------------
 # sources
 #-------------------------------------------------------------------------------
 
 set(SOURCES
-    include/${PROJECT_NAME}/conditionally_runtime.hpp
-    include/${PROJECT_NAME}/dynamic_extent.hpp
-    include/${PROJECT_NAME}/leak_detector_allocator.hpp
-    include/${PROJECT_NAME}/mixins.hpp
-    include/${PROJECT_NAME}/predicates.hpp
-    include/${PROJECT_NAME}/scope_exit.hpp
-    include/${PROJECT_NAME}/static_pimpl.hpp
-    include/${PROJECT_NAME}/strong_typedef.hpp
-    include/${PROJECT_NAME}/unchecked_any.hpp)
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
+    include/swiss/conditionally_runtime.hpp
+    include/swiss/dynamic_extent.hpp
+    include/swiss/leak_detector_allocator.hpp
+    include/swiss/mixins.hpp
+    include/swiss/predicates.hpp
+    include/swiss/scope_exit.hpp
+    include/swiss/static_pimpl.hpp
+    include/swiss/strong_typedef.hpp
+    include/swiss/unchecked_any.hpp)
 
 #-------------------------------------------------------------------------------
 # target
@@ -43,38 +63,37 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
 
 include(CMakePackageConfigHelpers)
 
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
-target_compile_definitions(${PROJECT_NAME} INTERFACE "$<$<BOOL:${SWISS_BUILD_SHARED_LIBS}>:SWISS_SHARED_DEFINE>")
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_23)
-
-target_include_directories(${PROJECT_NAME}
+target_sources(swiss PRIVATE ${SOURCES})
+target_compile_features(swiss INTERFACE cxx_std_23)
+target_compile_options(swiss INTERFACE ${SWISS_CXX_FLAGS})
+target_include_directories(swiss
     INTERFACE
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
 
 if(SWISS_INSTALL)
-    configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
-        ${PROJECT_NAME}-config.cmake
+    configure_package_config_file(cmake/swiss-config.cmake.in
+        swiss-config.cmake
         INSTALL_DESTINATION "${SWISS_INSTALL_CMAKEDIR}")
 
-    write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+    write_basic_package_version_file(swiss-config-version.cmake
         COMPATIBILITY AnyNewerVersion)
 
-    install(TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}_export
+    install(TARGETS swiss
+        EXPORT swiss_export
         INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
     install(DIRECTORY include/
         TYPE INCLUDE)
 
-    set(TARGETS_FILE "${PROJECT_NAME}-targets.cmake")
+    set(TARGETS_FILE "swiss-targets.cmake")
 
-    install(EXPORT ${PROJECT_NAME}_export
+    install(EXPORT swiss_export
         FILE "${TARGETS_FILE}"
         DESTINATION "${SWISS_INSTALL_CMAKEDIR}"
-        NAMESPACE ${PROJECT_NAME}::)
+        NAMESPACE swiss::)
     install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/swiss-config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/swiss-config-version.cmake"
         DESTINATION "${SWISS_INSTALL_CMAKEDIR}")
 endif()
 

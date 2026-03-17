@@ -30,6 +30,7 @@ set(SOURCES
     conditionally_runtime_test.cpp
     leak_detector_allocator_test.cpp
     predicates_test.cpp
+    scope_exit_test.cpp
     static_pimpl_test.cpp
     strong_typedef_test.cpp
     unchecked_any_test.cpp

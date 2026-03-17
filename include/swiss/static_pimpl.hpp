@@ -75,18 +75,18 @@ class static_pimpl final {
   }
 
  public:
-  constexpr auto operator<=>(static_pimpl const & that) const noexcept {
+  constexpr auto operator<=>(static_pimpl const & that) const noexcept -> auto {
     return operator*() <=> that.operator*();
   }
 
-  constexpr auto operator==(static_pimpl const & that) const noexcept {
+  constexpr auto operator==(static_pimpl const & that) const noexcept -> bool {
     return operator*() == that.operator*();
   }
 
  public:
   template <typename... Args>
   constexpr auto emplace(Args &&... args) noexcept(
-      std::is_nothrow_constructible_v<T, Args...>)
+      std::is_nothrow_constructible_v<T, Args...>) -> void
     requires std::constructible_from<T, Args...> &&
              std::is_nothrow_destructible_v<T>
   {

@@ -26,7 +26,8 @@ class strong_typedef final {
       : underlying_(std::forward<Args>(args)...) {}
 
  public:
-  constexpr auto operator<=>(strong_typedef const &) const noexcept = default;
+  constexpr auto operator<=>(strong_typedef const &) const noexcept
+      -> auto = default;
 
  public:
   constexpr auto operator*() noexcept -> T & { return underlying_; }

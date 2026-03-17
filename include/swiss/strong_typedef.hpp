@@ -1,7 +1,5 @@
 #pragma once
 
-// NOLINTNEXTLINE(unused-includes)
-#include <compare>
 #include <cstddef>
 #include <type_traits>
 
@@ -13,7 +11,7 @@ namespace swiss {
  * Uses pointer-like syntax for access to the implementation
  */
 template <typename Tag, typename T>
-class strong_typedef {
+class strong_typedef final {
  public:
   using value_type = T;
   using reference = T &;

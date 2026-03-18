@@ -1,9 +1,7 @@
 #pragma once
 
 #include <format>
-#include <stdexcept>
 #include <unordered_map>
-#include <variant>
 
 namespace swiss {
 

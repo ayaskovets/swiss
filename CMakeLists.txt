@@ -14,25 +14,27 @@ add_library(swiss INTERFACE)
 add_library(swiss::swiss ALIAS swiss)
 
 # ------------------------------------------------------------------------------
+# sources
+# ------------------------------------------------------------------------------
+
+set(HEADERS
+    include/swiss/conditionally_runtime.hpp
+    include/swiss/dynamic_extent.hpp
+    include/swiss/leak_detector_allocator.hpp
+    include/swiss/mixins.hpp
+    include/swiss/predicates.hpp
+    include/swiss/scope_exit.hpp
+    include/swiss/static_pimpl.hpp
+    include/swiss/strong_typedef.hpp
+    include/swiss/unchecked_any.hpp)
+
+# ------------------------------------------------------------------------------
 # target
 # ------------------------------------------------------------------------------
 
 target_sources(
-  swiss
-  INTERFACE FILE_SET
-            HEADERS
-            BASE_DIRS
-            "${CMAKE_CURRENT_SOURCE_DIR}/include"
-            FILES
-            include/swiss/conditionally_runtime.hpp
-            include/swiss/dynamic_extent.hpp
-            include/swiss/leak_detector_allocator.hpp
-            include/swiss/mixins.hpp
-            include/swiss/predicates.hpp
-            include/swiss/scope_exit.hpp
-            include/swiss/static_pimpl.hpp
-            include/swiss/strong_typedef.hpp
-            include/swiss/unchecked_any.hpp)
+  swiss INTERFACE FILE_SET HEADERS BASE_DIRS
+                  "${CMAKE_CURRENT_SOURCE_DIR}/include" FILES ${HEADERS})
 target_compile_features(swiss INTERFACE cxx_std_23)
 
 # ------------------------------------------------------------------------------

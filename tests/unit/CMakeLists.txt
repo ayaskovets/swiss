@@ -38,5 +38,7 @@ set(SOURCES
 # ------------------------------------------------------------------------------
 
 target_sources(swiss-unit-tests PRIVATE ${SOURCES})
+
 target_link_libraries(swiss-unit-tests PRIVATE swiss::swiss GTest::gtest_main)
+
 gtest_discover_tests(swiss-unit-tests)

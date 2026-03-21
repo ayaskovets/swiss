@@ -13,7 +13,6 @@ macro(import_targets)
 endmacro()
 
 if(NOT TARGET swiss::swiss)
-
     import_targets()
     check_required_components(swiss)
     message("-- Found swiss (version ${${CMAKE_FIND_PACKAGE_NAME}_VERSION})")

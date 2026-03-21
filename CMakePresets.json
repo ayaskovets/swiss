@@ -7,58 +7,127 @@
     },
     "configurePresets": [
         {
-            "name": "unit-tests",
+            "name": "base",
+            "hidden": true,
+            "generator": "Unix Makefiles",
             "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/build/${presetName}/install",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_COLOR_DIAGNOSTICS": "ON"
+            }
+        },
+        {
+            "name": "config-debug",
+            "hidden": true,
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "CMAKE_CXX_FLAGS": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address",
+                "CMAKE_CXX_FLAGS": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address"
+            }
+        },
+        {
+            "name": "config-release",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_FLAGS": "-O3 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror"
+            }
+        },
+        {
+            "name": "with-tests",
+            "hidden": true,
+            "cacheVariables": {
                 "BUILD_TESTING": "ON"
             }
         },
         {
-            "name": "install",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "installDir": "${sourceDir}/build/${presetName}/install",
+            "name": "without-tests",
+            "hidden": true,
             "cacheVariables": {
                 "BUILD_TESTING": "OFF"
             }
+        },
+        {
+            "name": "debug",
+            "displayName": "Configure interface library (debug)",
+            "inherits": [
+                "base",
+                "config-debug",
+                "with-tests"
+            ]
+        },
+        {
+            "name": "release",
+            "displayName": "Configure interface library (release)",
+            "inherits": [
+                "base",
+                "config-debug",
+                "with-tests"
+            ]
+        },
+        {
+            "name": "install",
+            "displayName": "Configure/Install interface library (release)",
+            "inherits": [
+                "base",
+                "config-release",
+                "without-tests"
+            ]
         }
     ],
     "buildPresets": [
         {
-            "name": "install",
-            "configurePreset": "install",
-            "targets": [
-                "install"
-            ]
+            "name": "debug",
+            "configurePreset": "debug"
         },
         {
-            "name": "unit-tests",
-            "configurePreset": "unit-tests"
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "install",
+            "configurePreset": "install",
+            "targets": "install"
         }
     ],
     "testPresets": [
         {
-            "name": "unit-tests",
-            "configurePreset": "unit-tests"
+            "name": "base",
+            "hidden": true,
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        },
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "inherits": "base"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release",
+            "inherits": "base"
         }
     ],
     "workflowPresets": [
         {
-            "name": "unit-tests",
+            "name": "test",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "unit-tests"
+                    "name": "debug"
                 },
                 {
                     "type": "build",
-                    "name": "unit-tests"
+                    "name": "debug"
                 },
                 {
                     "type": "test",
-                    "name": "unit-tests"
+                    "name": "debug"
                 }
             ]
         },

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <memory>
 #include <new>
 #include <type_traits>
@@ -15,7 +16,7 @@ namespace swiss {
  * Size and alignment must be manually set for the specific instance
  */
 template <typename T, std::size_t Size, std::size_t Alignment>
-class static_pimpl final {
+class static_pimpl {
  public:
   using value_type = T;
   using reference = T &;

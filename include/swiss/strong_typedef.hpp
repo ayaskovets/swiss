@@ -10,7 +10,7 @@ namespace swiss {
  * Uses pointer-like syntax for access to the implementation
  */
 template <typename Tag, typename T>
-class strong_typedef final {
+class strong_typedef {
  public:
   using value_type = T;
   using reference = T &;

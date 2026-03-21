@@ -10,7 +10,7 @@ namespace swiss {
  * stored on per-allocator-class basis rather than per-allocator-variable
  */
 template <typename T, bool IsShared = false>
-class leak_detector_allocator final : public std::allocator<T> {
+class leak_detector_allocator : public std::allocator<T> {
  public:
   using value_type = T;
   using reference = T &;

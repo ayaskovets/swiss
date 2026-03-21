@@ -17,7 +17,7 @@ template <typename T, bool IsRuntime, T CompileTimeValue = T()>
 class conditionally_runtime;
 
 template <typename T, T CompileTimeValue>
-class conditionally_runtime<T, true, CompileTimeValue> final {
+class conditionally_runtime<T, true, CompileTimeValue> {
  public:
   using value_type = T;
   using reference = T &;
@@ -42,7 +42,7 @@ class conditionally_runtime<T, true, CompileTimeValue> final {
 };
 
 template <typename T, T CompileTimeValue>
-class conditionally_runtime<T, false, CompileTimeValue> final {
+class conditionally_runtime<T, false, CompileTimeValue> {
  public:
   constexpr conditionally_runtime() noexcept = default;
 

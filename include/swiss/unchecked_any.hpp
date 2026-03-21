@@ -9,7 +9,7 @@ namespace swiss {
 /**
  * @brief Type-erased pimpl with value semantics
  */
-class unchecked_any final {
+class unchecked_any {
  public:
   template <typename T, typename... Args>
     requires(!std::is_array_v<T>)

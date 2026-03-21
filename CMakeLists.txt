@@ -8,8 +8,6 @@ project(
 # general settings and options
 # ------------------------------------------------------------------------------
 
-include(GNUInstallDirs)
-
 add_library(swiss INTERFACE)
 add_library(swiss::swiss ALIAS swiss)
 
@@ -42,6 +40,7 @@ target_compile_features(swiss INTERFACE cxx_std_23)
 # ------------------------------------------------------------------------------
 
 if(PROJECT_IS_TOP_LEVEL)
+  include(GNUInstallDirs)
   include(CMakePackageConfigHelpers)
 
   configure_package_config_file(
@@ -69,7 +68,10 @@ endif()
 # tests
 # ------------------------------------------------------------------------------
 
-if(BUILD_TESTING)
+if(PROJECT_IS_TOP_LEVEL)
   include(CTest)
-  add_subdirectory(tests/unit)
+
+  if(BUILD_TESTING)
+    add_subdirectory(tests/unit)
+  endif()
 endif()

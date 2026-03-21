@@ -1,10 +1,14 @@
 {
-    "version": 8,
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
     "configurePresets": [
         {
-            "name": "debug",
+            "name": "unit-tests",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
@@ -13,12 +17,10 @@
             }
         },
         {
-            "name": "release",
+            "name": "install",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "installDir": "${sourceDir}/build/${presetName}/install",
-            "generator": "Unix Makefiles",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
                 "BUILD_TESTING": "OFF"
             }
         }
@@ -26,20 +28,20 @@
     "buildPresets": [
         {
             "name": "install",
-            "configurePreset": "release",
+            "configurePreset": "install",
             "targets": [
                 "install"
             ]
         },
         {
             "name": "unit-tests",
-            "configurePreset": "debug"
+            "configurePreset": "unit-tests"
         }
     ],
     "testPresets": [
         {
             "name": "unit-tests",
-            "configurePreset": "debug"
+            "configurePreset": "unit-tests"
         }
     ],
     "workflowPresets": [
@@ -48,7 +50,7 @@
             "steps": [
                 {
                     "type": "configure",
-                    "name": "debug"
+                    "name": "unit-tests"
                 },
                 {
                     "type": "build",
@@ -65,7 +67,7 @@
             "steps": [
                 {
                     "type": "configure",
-                    "name": "release"
+                    "name": "install"
                 },
                 {
                     "type": "build",

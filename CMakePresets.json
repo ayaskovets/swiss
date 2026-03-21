@@ -1,62 +1,79 @@
 {
-    "version": 6,
+    "version": 8,
     "configurePresets": [
         {
-            "name": "clang-debug",
-            "displayName": "clang-debug",
+            "name": "debug",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "installDir": "${sourceDir}/build/${presetName}/install",
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "SWISS_CXX_FLAGS": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address",
-                "SWISS_LINKER_FLAGS": "-fsanitize=address",
-                "SWISS_BUILD_TESTING": "ON"
+                "CMAKE_CXX_FLAGS": "-g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wcast-align -Wcast-qual -Wnull-dereference -Woverloaded-virtual -Werror -fsanitize=address",
+                "SWISS_BUILD_TESTING": "ON",
+                "SWISS_INSTALL": "OFF"
             }
         },
         {
-            "name": "clang-release",
-            "displayName": "clang-release",
+            "name": "release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "installDir": "${sourceDir}/build/${presetName}/install",
             "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "SWISS_CXX_FLAGS": "-O3",
-                "SWISS_BUILD_TESTING": "OFF"
+                "SWISS_BUILD_TESTING": "OFF",
+                "SWISS_INSTALL": "ON"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "clang-debug",
-            "configurePreset": "clang-debug",
-            "displayName": "clang-debug"
+            "name": "install",
+            "configurePreset": "release",
+            "targets": [
+                "install"
+            ]
         },
         {
-            "name": "clang-release",
-            "configurePreset": "clang-release",
-            "displayName": "clang-release"
+            "name": "unit-tests",
+            "configurePreset": "debug"
         }
     ],
     "testPresets": [
         {
-            "name": "clang-debug",
-            "configurePreset": "clang-debug",
-            "displayName": "clang-debug",
-            "output": {
-                "verbosity": "verbose"
-            }
+            "name": "unit-tests",
+            "configurePreset": "debug"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "unit-tests",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "debug"
+                },
+                {
+                    "type": "build",
+                    "name": "unit-tests"
+                },
+                {
+                    "type": "test",
+                    "name": "unit-tests"
+                }
+            ]
         },
         {
-            "name": "clang-release",
-            "configurePreset": "clang-release",
-            "displayName": "clang-release",
-            "output": {
-                "verbosity": "verbose"
-            }
+            "name": "install",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "release"
+                },
+                {
+                    "type": "build",
+                    "name": "install"
+                }
+            ]
         }
     ]
 }

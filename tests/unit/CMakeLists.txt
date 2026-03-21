@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.29.2)
-project(swiss-unit-tests)
+cmake_minimum_required(VERSION 3.23)
+project(swiss-unit-tests LANGUAGES CXX)
 
 #-------------------------------------------------------------------------------
 # general settings and options
 #-------------------------------------------------------------------------------
 
 if(PROJECT_IS_TOP_LEVEL)
-    enable_testing()
+    include(CTest)
 endif()
 
 add_executable(swiss-unit-tests)
@@ -46,8 +46,5 @@ target_link_libraries(swiss-unit-tests
     swiss::swiss
     GTest::gtest_main)
 
-if(NOT PROJECT_IS_TOP_LEVEL)
-    target_link_options(swiss-unit-tests PRIVATE ${SWISS_LINKER_FLAGS})
-endif()
-
+include(GoogleTest)
 gtest_discover_tests(swiss-unit-tests)

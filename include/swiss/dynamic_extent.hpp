@@ -1,14 +1,14 @@
 #pragma once
 
 #include <concepts>
+#include <limits>
 
 namespace swiss {
 
 /**
- * @brief Type-parametrized std::dynamic_extent with 0 representing a statically
- * undetermined value
+ * @brief Type-parametrized std::dynamic_extent
  */
-template <std::unsigned_integral T, T Value = static_cast<T>(0)>
+template <std::unsigned_integral T, T Value = std::numeric_limits<T>::max()>
 constexpr T const kDynamicExtent = Value;
 
 }  // namespace swiss

@@ -16,8 +16,8 @@ class non_copyable {
       -> non_copyable & = default;
 
  public:
-  constexpr non_copyable(non_copyable const &) = delete;
-  constexpr auto operator=(non_copyable const &) = delete;
+  constexpr non_copyable(non_copyable const &) noexcept = delete;
+  constexpr auto operator=(non_copyable const &) noexcept = delete;
 };
 
 /**
@@ -37,8 +37,8 @@ class non_movable {
       -> non_movable & = default;
 
  public:
-  constexpr non_movable(non_movable &&) = delete;
-  constexpr auto operator=(non_movable &&) = delete;
+  constexpr non_movable(non_movable &&) noexcept = delete;
+  constexpr auto operator=(non_movable &&) noexcept = delete;
 };
 
 }  // namespace swiss

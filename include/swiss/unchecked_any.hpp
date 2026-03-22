@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <memory>
+#include <type_traits>
 #include <utility>
 
 namespace swiss {
@@ -56,7 +57,8 @@ class unchecked_any {
 
  public:
   template <typename T>
-  constexpr auto operator=(T value) -> unchecked_any & {
+  constexpr auto operator=(T value) noexcept(
+      std::is_nothrow_move_constructible_v<T>) -> unchecked_any & {
     new (this) unchecked_any(std::move(value));
     return *this;
   }

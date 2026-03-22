@@ -33,8 +33,7 @@ class unchecked_any {
         data_(that.clone_(that.data_)),
         clone_(that.clone_) {}
 
-  constexpr auto operator=(unchecked_any const & that) noexcept(false)
-      -> unchecked_any & {
+  constexpr auto operator=(unchecked_any const & that) -> unchecked_any & {
     new (this) unchecked_any(that);
     return *this;
   }

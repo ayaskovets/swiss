@@ -10,10 +10,8 @@ namespace swiss {
 
 /**
  * @brief Pimpl without dynamic allocations
- *
- * Uses pointer-like syntax for access to the implementation
- *
- * Size and alignment must be manually set for the specific instance
+ * @note Uses pointer-like syntax for access to the implementation
+ * @note Size and alignment must be manually set for the specific instance
  */
 template <typename T, std::size_t Size, std::size_t Alignment>
 class static_pimpl {

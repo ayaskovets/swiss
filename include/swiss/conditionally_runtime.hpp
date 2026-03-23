@@ -7,11 +7,9 @@ namespace swiss {
 
 /**
  * @brief Conditionally runtime-stored value
- *
- * Uses pointer-like syntax for access to the stored value
- *
- * Add [[no_unique_address]] to a compile-time version of an object of this
- * class to optimize away storage at runtime
+ * @note Uses pointer-like syntax for access to the stored value
+ * @note Add [[no_unique_address]] to a compile-time version of an object of
+ * this class to optimize away storage at runtime
  */
 template <typename T, bool IsRuntime, T CompileTimeValue = T()>
 class conditionally_runtime;

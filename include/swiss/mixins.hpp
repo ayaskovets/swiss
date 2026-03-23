@@ -4,8 +4,7 @@ namespace swiss {
 
 /**
  * @brief Mix-in to restrict copying
- *
- * Please follow the rule of five for all derived types
+ * @note Please follow the rule of five for all derived types
  */
 class non_copyable {
  public:
@@ -22,9 +21,7 @@ class non_copyable {
 
 /**
  * @brief Mix-in to restrict moving
- *
- * Please follow the rule of five for all derived types
- *
+ * @note Please follow the rule of five for all derived types
  * @warning Keep in mind that all operations with a type that prohibits only its
  * moves will fallback to copy
  */

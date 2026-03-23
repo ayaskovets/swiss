@@ -6,8 +6,7 @@ namespace swiss {
 
 /**
  * @brief Strong type alias
- *
- * Uses pointer-like syntax for access to the implementation
+ * @note Uses pointer-like syntax for access to the implementation
  */
 template <typename Tag, typename T>
 class strong_typedef {

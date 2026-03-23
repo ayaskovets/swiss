@@ -49,7 +49,7 @@ class leak_detector_allocator : public std::allocator<T> {
     return {.ptr = allocate(n), .count = n};
   }
 
-  constexpr auto deallocate(T * const ptr, std::size_t const n) -> void {
+  constexpr void deallocate(T * const ptr, std::size_t const n) {
     auto const erase_allocation_from = [ptr, n](auto & allocations) {
       auto const allocation = allocations.find(ptr);
       if (allocation == allocations.end()) [[unlikely]] {
@@ -86,7 +86,7 @@ class leak_detector_allocator : public std::allocator<T> {
   };
 
  public:
-  constexpr auto clear() noexcept -> void {
+  constexpr void clear() noexcept {
     if constexpr (IsShared) {
       shared_allocations_.clear();
     } else {

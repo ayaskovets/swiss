@@ -84,8 +84,8 @@ class static_pimpl {
 
  public:
   template <typename... Args>
-  constexpr auto emplace(Args &&... args) noexcept(
-      std::is_nothrow_constructible_v<T, Args...>) -> void
+  constexpr void emplace(Args &&... args) noexcept(
+      std::is_nothrow_constructible_v<T, Args...>)
     requires std::constructible_from<T, Args...> &&
              std::is_nothrow_destructible_v<T>
   {

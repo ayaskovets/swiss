@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23.0)
+cmake_minimum_required(VERSION 3.25.0)
 project(
   swiss
   VERSION 0.0.1
@@ -34,7 +34,7 @@ target_sources(
   swiss INTERFACE FILE_SET HEADERS BASE_DIRS
                   "${CMAKE_CURRENT_SOURCE_DIR}/include" FILES ${HEADERS})
 
-target_compile_features(swiss INTERFACE cxx_std_23)
+target_compile_features(swiss INTERFACE cxx_std_25)
 
 # ------------------------------------------------------------------------------
 # install

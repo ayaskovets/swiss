@@ -34,7 +34,7 @@ target_sources(
   swiss INTERFACE FILE_SET HEADERS BASE_DIRS
                   "${CMAKE_CURRENT_SOURCE_DIR}/include" FILES ${HEADERS})
 
-target_compile_features(swiss INTERFACE cxx_std_25)
+target_compile_features(swiss INTERFACE cxx_std_23)
 
 # ------------------------------------------------------------------------------
 # install

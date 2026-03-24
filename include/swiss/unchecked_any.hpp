@@ -9,6 +9,9 @@ namespace swiss {
 
 /**
  * @brief Type-erased pimpl with value semantics
+ * @warning This type is different from std::any in that it does not check that
+ * the requested type is the same as stored and subsequently does not throw any
+ * exceptions. Converting the stored memory to an invalid type is UB
  */
 class unchecked_any {
  public:

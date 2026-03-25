@@ -12,11 +12,11 @@ namespace swiss {
 template <typename T, bool IsShared = false>
 class leak_detector_allocator : public std::allocator<T> {
  public:
-  using value_type = T;
-  using reference = T &;
+  using value_type      = T;
+  using reference       = T &;
   using const_reference = T &;
-  using pointer = T *;
-  using const_pointer = T const *;
+  using pointer         = T *;
+  using const_pointer   = T const *;
 
  public:
   using std::allocator<T>::allocator;

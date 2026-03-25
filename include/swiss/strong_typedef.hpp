@@ -11,11 +11,11 @@ namespace swiss {
 template <typename Tag, typename T>
 class strong_typedef {
  public:
-  using value_type = T;
-  using reference = T &;
+  using value_type      = T;
+  using reference       = T &;
   using const_reference = T &;
-  using pointer = T *;
-  using const_pointer = T const *;
+  using pointer         = T *;
+  using const_pointer   = T const *;
 
  public:
   template <typename... Args>

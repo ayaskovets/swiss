@@ -16,11 +16,11 @@ namespace swiss {
 template <typename T, std::size_t Size, std::size_t Alignment>
 class static_pimpl {
  public:
-  using value_type = T;
-  using reference = T &;
+  using value_type      = T;
+  using reference       = T &;
   using const_reference = T &;
-  using pointer = T *;
-  using const_pointer = T const *;
+  using pointer         = T *;
+  using const_pointer   = T const *;
 
  public:
   template <typename... Args>

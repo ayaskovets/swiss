@@ -103,7 +103,7 @@ TEST(unchecked_any, move_assignment) {
 }
 
 TEST(unchecked_any, value_assignment) {
-  std::string const kSomeString = "a string";
+  std::string const kSomeString    = "a string";
   std::string const kAnotherString = "another string";
 
   swiss::unchecked_any value(kSomeString);

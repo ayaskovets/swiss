@@ -82,7 +82,7 @@ TEST(strong_typedef, move_assignment) {
 }
 
 TEST(strong_typedef, value_assignment) {
-  std::string const kSomeString = "a string";
+  std::string const kSomeString    = "a string";
   std::string const kAnotherString = "another string";
 
   swiss::strong_typedef<std::monostate, std::string> value(kSomeString);

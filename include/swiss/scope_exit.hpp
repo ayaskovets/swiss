@@ -21,11 +21,11 @@ class scope_exit final {
   constexpr ~scope_exit() noexcept { finally_(); }
 
  public:
-  constexpr explicit scope_exit() noexcept = delete;
-  constexpr scope_exit(scope_exit const &) noexcept = delete;
-  constexpr scope_exit(scope_exit &&) noexcept = delete;
+  constexpr explicit scope_exit() noexcept              = delete;
+  constexpr scope_exit(scope_exit const &) noexcept     = delete;
+  constexpr scope_exit(scope_exit &&) noexcept          = delete;
   constexpr auto operator=(scope_exit const &) noexcept = delete;
-  constexpr auto operator=(scope_exit &&) noexcept = delete;
+  constexpr auto operator=(scope_exit &&) noexcept      = delete;
 
  private:
   T finally_;

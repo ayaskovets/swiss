@@ -20,3 +20,4 @@ QualifierAlignment: Right
 ReferenceAlignment: Middle
 PointerAlignment: Middle
 DerivePointerAlignment: false
+AlignConsecutiveAssignments: true

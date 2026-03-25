@@ -5,7 +5,7 @@
 namespace tests::unit {
 
 TEST(scope_exit, destructor) {
-  auto flag = false;
+  auto flag    = false;
   auto finally = [&flag]() noexcept { flag = true; };
 
   {

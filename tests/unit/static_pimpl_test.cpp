@@ -80,7 +80,7 @@ TEST(static_pimpl, move_assignment) {
 }
 
 TEST(static_pimpl, value_assignment) {
-  std::string const kSomeString = "a string";
+  std::string const kSomeString    = "a string";
   std::string const kAnotherString = "another string";
 
   swiss::static_pimpl<std::string, sizeof(std::string), alignof(std::string)>

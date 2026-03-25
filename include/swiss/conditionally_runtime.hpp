@@ -17,11 +17,11 @@ class conditionally_runtime;
 template <typename T, T CompileTimeValue>
 class conditionally_runtime<T, true, CompileTimeValue> {
  public:
-  using value_type = T;
-  using reference = T &;
+  using value_type      = T;
+  using reference       = T &;
   using const_reference = T &;
-  using pointer = T *;
-  using const_pointer = T const *;
+  using pointer         = T *;
+  using const_pointer   = T const *;
 
  public:
   constexpr conditionally_runtime() = delete;

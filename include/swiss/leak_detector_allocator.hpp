@@ -27,9 +27,9 @@ class leak_detector_allocator : public std::allocator<T> {
 
     auto const store_allocation_to = [ptr, n](auto & allocations) {
       if (allocations.count(ptr)) [[unlikely]] {
-        throw std::runtime_error(
-            std::format("double allocation on address {:p}",
-                        static_cast<void const * const>(ptr)));
+        throw std::runtime_error(std::format(
+            "leak_detector_allocator::allocate(): double alloc {:p}",
+            static_cast<void const * const>(ptr)));
       }
 
       allocations.emplace(ptr, n);
@@ -53,17 +53,17 @@ class leak_detector_allocator : public std::allocator<T> {
     auto const erase_allocation_from = [ptr, n](auto & allocations) {
       auto const allocation = allocations.find(ptr);
       if (allocation == allocations.end()) [[unlikely]] {
-        throw std::runtime_error(
-            std::format("deallocation on invalid address {:p}",
-                        static_cast<void const * const>(ptr)));
+        throw std::runtime_error(std::format(
+            "leak_detector_allocator::deallocate(): invalid address {:p}",
+            static_cast<void const * const>(ptr)));
       }
 
       auto const leaked_bytes =
           std::max(allocation->second, n) - std::min(allocation->second, n);
       if (leaked_bytes != 0) [[unlikely]] {
-        throw std::runtime_error(
-            std::format("leaked {} bytes on address {:p}", leaked_bytes,
-                        static_cast<void const * const>(ptr)));
+        throw std::runtime_error(std::format(
+            "leak_detector_allocator::deallocate(): leaked {} bytes {:p}",
+            leaked_bytes, static_cast<void const * const>(ptr)));
       }
 
       allocations.erase(allocation);

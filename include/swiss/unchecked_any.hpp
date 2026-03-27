@@ -38,7 +38,9 @@ class unchecked_any {
         clone_(that.clone_) {}
 
   constexpr auto operator=(unchecked_any const & that) -> unchecked_any & {
-    new (this) unchecked_any(that);
+    if (this != &that) {
+      new (this) unchecked_any(that);
+    }
     return *this;
   }
 
@@ -48,7 +50,9 @@ class unchecked_any {
         clone_(std::exchange(that.clone_, nullptr)) {}
 
   constexpr auto operator=(unchecked_any && that) noexcept -> unchecked_any & {
-    new (this) unchecked_any(std::move(that));
+    if (this != &that) {
+      new (this) unchecked_any(std::move(that));
+    }
     return *this;
   }
 

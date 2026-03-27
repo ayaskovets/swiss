@@ -22,6 +22,7 @@ set(HEADERS
     include/swiss/leak_detector_allocator.hpp
     include/swiss/mixins.hpp
     include/swiss/predicates.hpp
+    include/swiss/rule_of_five_logger.hpp
     include/swiss/scope_exit.hpp
     include/swiss/static_pimpl.hpp
     include/swiss/strong_typedef.hpp

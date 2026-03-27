@@ -25,7 +25,8 @@ set(HEADERS
     include/swiss/scope_exit.hpp
     include/swiss/static_pimpl.hpp
     include/swiss/strong_typedef.hpp
-    include/swiss/unchecked_any.hpp)
+    include/swiss/unchecked_any.hpp
+    include/swiss/variadic_traits.hpp)
 
 # ------------------------------------------------------------------------------
 # target

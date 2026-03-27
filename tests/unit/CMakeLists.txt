@@ -31,7 +31,8 @@ set(SOURCES
     scope_exit_test.cpp
     static_pimpl_test.cpp
     strong_typedef_test.cpp
-    unchecked_any_test.cpp)
+    unchecked_any_test.cpp
+    variadic_traits_test.cpp)
 
 # ------------------------------------------------------------------------------
 # target

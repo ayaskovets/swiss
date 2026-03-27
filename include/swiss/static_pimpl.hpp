@@ -72,7 +72,8 @@ class static_pimpl {
   }
 
  public:
-  constexpr auto operator<=>(static_pimpl const & that) const noexcept -> auto {
+  constexpr auto operator<=>(static_pimpl const & that) const noexcept
+      -> decltype(auto) {
     return operator*() <=> that.operator*();
   }
 

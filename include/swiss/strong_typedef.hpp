@@ -25,7 +25,7 @@ class strong_typedef {
 
  public:
   constexpr auto operator<=>(strong_typedef const &) const noexcept
-      -> decltype(auto) = default;
+      -> auto = default;
 
  public:
   constexpr auto operator*() noexcept -> T & { return underlying_; }

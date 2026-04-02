@@ -5,6 +5,10 @@
 
 namespace swiss {
 
+/**
+ * @brief A boilerplate class that each C++ developer has written at least once.
+ * Used for logging special member function calls to std::ostream
+ */
 class RuleOfFiveLogger {
  private:
   static constexpr auto const kMovedFromTag = "<moved>";

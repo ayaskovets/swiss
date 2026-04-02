@@ -9,7 +9,8 @@
 namespace swiss {
 
 /**
- * @brief Pimpl without dynamic allocations
+ * @brief Pimpl without dynamic allocations. Implementation is stored in a
+ * buffer allocated on the stack
  * @note Uses pointer-like syntax for access to the implementation
  * @note Size and alignment must be manually set for the specific instance
  */

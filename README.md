@@ -4,6 +4,8 @@ A swiss-army-library knife with various C++ utilities
 
 # brief
 
+This library is header-only and requires C++23
+
 This library uses CMake workflows (CMake >= 3.25.0) for all its build scripts
 
 # install

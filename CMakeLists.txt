@@ -50,7 +50,7 @@ if(PROJECT_IS_TOP_LEVEL)
 
   configure_package_config_file(
     cmake/swiss-config.cmake.in swiss-config.cmake
-    INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/swiss")
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/swiss")
 
   write_basic_package_version_file(swiss-config-version.cmake
                                    COMPATIBILITY SameMajorVersion)
@@ -63,12 +63,12 @@ if(PROJECT_IS_TOP_LEVEL)
   install(
     EXPORT swiss_export
     FILE "swiss-targets.cmake"
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/swiss"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/swiss"
     NAMESPACE swiss::)
 
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/swiss-config.cmake"
                 "${CMAKE_CURRENT_BINARY_DIR}/swiss-config-version.cmake"
-          DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/swiss")
+          DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/swiss")
 endif()
 
 # ------------------------------------------------------------------------------

@@ -26,6 +26,7 @@ add_executable(swiss-unit-tests)
 
 set(SOURCES
     conditionally_runtime_test.cpp
+    functional_test.cpp
     leak_detector_allocator_test.cpp
     predicates_test.cpp
     scope_exit_test.cpp

@@ -19,7 +19,7 @@ class unchecked_any {
     requires(!std::is_array_v<T>)
   constexpr explicit unchecked_any(std::in_place_type_t<T>, Args &&... args)
     requires(std::constructible_from<T, Args...>)
-      : delete_([](void * const ptr) {
+      : delete_([](void * const ptr) noexcept {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
           delete static_cast<T * const>(ptr);
         }),

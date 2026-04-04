@@ -19,6 +19,7 @@ set(HEADERS
     include/swiss/conditionally_runtime.hpp
     include/swiss/cpu_relax.hpp
     include/swiss/dynamic_extent.hpp
+    include/swiss/functional.hpp
     include/swiss/leak_detector_allocator.hpp
     include/swiss/mixins.hpp
     include/swiss/predicates.hpp

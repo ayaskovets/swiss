@@ -24,7 +24,7 @@ TEST(strong_typedef, smoke) {
 }
 
 TEST(strong_typedef, user_defined_type) {
-  constexpr auto kValue = 42;
+  constexpr int kValue = 42;
 
   swiss::strong_typedef<class tag, int> const value(kValue);
   EXPECT_EQ(*value, kValue);

@@ -58,7 +58,7 @@ class leak_detector_allocator : public std::allocator<T> {
             static_cast<void const * const>(ptr)));
       }
 
-      auto const leaked_bytes =
+      std::size_t const leaked_bytes =
           std::max(allocation->second, n) - std::min(allocation->second, n);
       if (leaked_bytes != 0) [[unlikely]] {
         throw std::runtime_error(std::format(

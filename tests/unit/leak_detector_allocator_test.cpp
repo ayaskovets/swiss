@@ -20,7 +20,7 @@ TEST(leak_detector_allocator, allocate) {
   swiss::leak_detector_allocator<int> allocator;
   EXPECT_TRUE(allocator.empty());
 
-  auto * const ptr = allocator.allocate(kAllocatedBlocks);
+  int * const ptr = allocator.allocate(kAllocatedBlocks);
   EXPECT_FALSE(allocator.empty());
 
   EXPECT_ANY_THROW(allocator.deallocate(nullptr, kAllocatedBlocks));

@@ -33,4 +33,16 @@ constexpr auto invoke_tail(
                      std::forward<Tail>(tail)...);
 }
 
+template <typename T, typename Callable, typename... Args>
+constexpr void assign_invoke_result_if_not_void(
+    T & ret, Callable && callable,
+    Args &&... args) noexcept(std::is_nothrow_invocable_v<Callable, Args...>) {
+  if constexpr (std::is_same_v<std::invoke_result_t<Callable, Args...>, void>) {
+    std::invoke(std::forward<Callable>(callable), std::forward<Args>(args)...);
+  } else {
+    ret = std::invoke(std::forward<Callable>(callable),
+                      std::forward<Args>(args)...);
+  }
+}
+
 }  // namespace swiss

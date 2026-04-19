@@ -4,7 +4,7 @@
 
 namespace tests::unit {
 
-TEST(functional, invoke_tail) {
+TEST(functional, invoke_tail_func) {
   // NOLINTBEGIN(readability-identifier-length)
   auto const invocable = [](int const & i, char const &,
                             float const &) noexcept { return i; };
@@ -20,7 +20,7 @@ TEST(functional, invoke_tail) {
   // NOLINTEND(readability-identifier-length)
 }
 
-TEST(functional, capture_this) {
+TEST(functional, invoke_tail_class) {
   struct Object final {
     [[nodiscard]] constexpr auto const_method(int addition) const noexcept
         -> int {
@@ -53,6 +53,20 @@ TEST(functional, capture_this) {
             5);
   static_assert(!noexcept(
       swiss::invoke_tail(object, &Object::throw_method, std::string{}, 3)));
+}
+
+TEST(functional, assign_invoke_result_if_not_void) {
+  auto const void_result_t = [](int) {};
+
+  auto const int_result_t = [](int) { return 2; };
+
+  int ret = 0;
+
+  swiss::assign_invoke_result_if_not_void(ret, void_result_t, int{});
+  EXPECT_EQ(ret, 0);
+
+  swiss::assign_invoke_result_if_not_void(ret, int_result_t, int{});
+  EXPECT_EQ(ret, 2);
 }
 
 }  // namespace tests::unit

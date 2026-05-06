@@ -17,7 +17,7 @@ class unchecked_any {
  public:
   template <typename T, typename... Args>
     requires(!std::is_array_v<T>)
-  constexpr explicit unchecked_any(std::in_place_type_t<T>, Args &&... args)
+  explicit constexpr unchecked_any(std::in_place_type_t<T>, Args &&... args)
     requires(std::constructible_from<T, Args...>)
       : delete_([](void * const ptr) noexcept {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
@@ -29,7 +29,7 @@ class unchecked_any {
         }) {}
 
   template <typename T>
-  constexpr explicit unchecked_any(T value)
+  explicit constexpr unchecked_any(T value)
       : unchecked_any(std::in_place_type<T>, std::move(value)) {}
 
   constexpr unchecked_any(unchecked_any const & that)

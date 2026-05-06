@@ -21,7 +21,7 @@ class strong_typedef {
 
  public:
   template <typename... Args>
-  constexpr explicit strong_typedef(Args &&... args) noexcept(
+  explicit constexpr strong_typedef(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>)
       : underlying_(std::forward<Args>(args)...) {}
 

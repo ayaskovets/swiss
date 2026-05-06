@@ -12,16 +12,16 @@ namespace swiss {
 template <std::invocable T>
 class scope_exit final {
  private:
-  static_assert(noexcept(std::declval<T>()()));
+  static_assert(std::is_nothrow_invocable_v<T>);
 
  public:
-  constexpr explicit scope_exit(T finally) noexcept(
+  explicit constexpr scope_exit(T finally) noexcept(
       std::is_nothrow_move_constructible_v<T>)
       : finally_(std::move(finally)) {}
   constexpr ~scope_exit() noexcept { finally_(); }
 
  public:
-  constexpr explicit scope_exit() noexcept              = delete;
+  explicit constexpr scope_exit() noexcept              = delete;
   constexpr scope_exit(scope_exit const &) noexcept     = delete;
   constexpr scope_exit(scope_exit &&) noexcept          = delete;
   constexpr auto operator=(scope_exit const &) noexcept = delete;

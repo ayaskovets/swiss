@@ -8,6 +8,7 @@ namespace swiss {
 constexpr void cpu_relax() noexcept { _mm_pause(); }
 
 #elif defined(__GNUC__) || defined(__clang__)
+
 #if defined(__i386__) || defined(__x86_64__)
 
 #include <xmmintrin.h>
@@ -27,17 +28,7 @@ constexpr void cpu_relax() noexcept {
   __asm__ __volatile__("or 27,27,27" ::: "memory");
 }
 
-#else
-
-#include <thread>
-constexpr void cpu_relax() noexcept { std::this_thread::yield(); }
-
 #endif
-
-#else
-
-#include <thread>
-constexpr void cpu_relax() noexcept { std::this_thread::yield(); }
 
 #endif
 

@@ -25,7 +25,7 @@ class static_pimpl {
 
  public:
   template <typename... Args>
-  constexpr explicit static_pimpl(Args &&... args) noexcept(
+  explicit constexpr static_pimpl(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>) {
     std::construct_at(operator->(), std::forward<Args>(args)...);
   }

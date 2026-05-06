@@ -25,7 +25,7 @@ class conditionally_runtime<T, true, CompileTimeValue> {
 
  public:
   constexpr conditionally_runtime() = delete;
-  constexpr explicit conditionally_runtime(T value) noexcept(
+  explicit constexpr conditionally_runtime(T value) noexcept(
       std::is_nothrow_move_constructible_v<T>)
       : value_(std::move(value)) {}
 

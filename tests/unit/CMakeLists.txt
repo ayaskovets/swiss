@@ -31,6 +31,7 @@ set(SOURCES
     leak_detector_allocator_test.cpp
     predicates_test.cpp
     scope_exit_test.cpp
+    scope_fail_test.cpp
     static_pimpl_test.cpp
     strong_typedef_test.cpp
     trivial_pair_test.cpp

@@ -19,14 +19,17 @@ set(HEADERS
     include/swiss/aligned.hpp
     include/swiss/concepts.hpp
     include/swiss/conditionally_runtime.hpp
+    include/swiss/cpu_arch.hpp
     include/swiss/cpu_relax.hpp
     include/swiss/dynamic_extent.hpp
     include/swiss/functional.hpp
     include/swiss/leak_detector_allocator.hpp
     include/swiss/mixins.hpp
+    include/swiss/os_kind.hpp
     include/swiss/predicates.hpp
     include/swiss/rule_of_five_logger.hpp
     include/swiss/scope_exit.hpp
+    include/swiss/scope_fail.hpp
     include/swiss/static_pimpl.hpp
     include/swiss/strong_typedef.hpp
     include/swiss/trivial_pair.hpp

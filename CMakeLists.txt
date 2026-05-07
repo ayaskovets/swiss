@@ -34,6 +34,7 @@ set(HEADERS
     include/swiss/strong_typedef.hpp
     include/swiss/trivial_pair.hpp
     include/swiss/unchecked_any.hpp
+    include/swiss/manual_lifetime.hpp
     include/swiss/variadic_traits.hpp)
 
 # ------------------------------------------------------------------------------

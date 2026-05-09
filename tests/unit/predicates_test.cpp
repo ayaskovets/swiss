@@ -10,6 +10,9 @@ TEST(predicates, is_power_of_two) {
   constexpr std::size_t kLargePowerOfTwo = 2U << 31U;
   static_assert(!swiss::is_power_of_two(kLargePowerOfTwo));
   static_assert(swiss::is_power_of_two(kLargePowerOfTwo + 1));
+
+  static_assert(swiss::is_power_of_two_gt(4, 3));
+  static_assert(!swiss::is_power_of_two_gt(4, 4));
 }
 
 TEST(predicates, is_even) {

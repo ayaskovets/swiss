@@ -25,20 +25,19 @@ add_executable(swiss-unit-tests)
 # ------------------------------------------------------------------------------
 
 set(SOURCES
-    # aligned_test.cpp
-    # conditionally_runtime_test.cpp
-    # functional_test.cpp
-    # leak_detector_allocator_test.cpp
-    # predicates_test.cpp
-    # scope_exit_test.cpp
-    # scope_fail_test.cpp
-    # static_pimpl_test.cpp
-    # strong_typedef_test.cpp
-    # trivial_pair_test.cpp
-    # unchecked_any_test.cpp
+    aligned_test.cpp
+    conditionally_runtime_test.cpp
+    functional_test.cpp
+    leak_detector_allocator_test.cpp
+    predicates_test.cpp
+    scope_exit_test.cpp
+    scope_fail_test.cpp
+    static_pimpl_test.cpp
+    strong_typedef_test.cpp
+    trivial_pair_test.cpp
+    unchecked_any_test.cpp
     manual_lifetime_test.cpp
-    # variadic_traits_test.cpp
-    )
+    variadic_traits_test.cpp)
 
 # ------------------------------------------------------------------------------
 # target

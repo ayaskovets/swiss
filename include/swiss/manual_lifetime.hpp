@@ -18,10 +18,8 @@ class manual_lifetime {
   using const_pointer   = T const *;
 
  public:
-  constexpr auto data() noexcept -> pointer { return &storage_.value; }
-  constexpr auto data() const noexcept -> const_pointer {
-    return &storage_.value;
-  }
+  constexpr auto data() noexcept -> T * { return &storage_.value; }
+  constexpr auto data() const noexcept -> T const * { return &storage_.value; }
 
  public:
   constexpr auto operator*() noexcept -> T & { return storage_.value; }

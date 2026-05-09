@@ -16,7 +16,7 @@ TEST(aligned, size) {
 
 TEST(aligned, constructor) {
   swiss::aligned<std::size_t, 16>();
-  swiss::aligned<std::size_t, 16>(2);
+  swiss::aligned<std::size_t, 16>(2U);
 }
 
 TEST(aligned, dereference) {

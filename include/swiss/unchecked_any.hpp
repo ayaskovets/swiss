@@ -15,9 +15,19 @@ namespace swiss {
  */
 class unchecked_any {
  public:
+  constexpr unchecked_any() noexcept
+      : delete_(nullptr), data_(nullptr), clone_(nullptr) {}
+
+  template <typename T>
+  explicit constexpr unchecked_any(T value) noexcept(
+      std::is_nothrow_move_constructible_v<T>)
+      : unchecked_any(std::in_place_type<T>, std::move(value)) {}
+
   template <typename T, typename... Args>
     requires(!std::is_array_v<T>)
-  explicit constexpr unchecked_any(std::in_place_type_t<T>, Args &&... args)
+  explicit constexpr unchecked_any(
+      std::in_place_type_t<T>,
+      Args &&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
     requires(std::constructible_from<T, Args...>)
       : delete_([](void * const ptr) noexcept {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
@@ -27,10 +37,6 @@ class unchecked_any {
         clone_([](void const * const ptr) -> void * {
           return std::make_unique<T>(*static_cast<T const *>(ptr)).release();
         }) {}
-
-  template <typename T>
-  explicit constexpr unchecked_any(T value)
-      : unchecked_any(std::in_place_type<T>, std::move(value)) {}
 
   constexpr unchecked_any(unchecked_any const & that)
       : delete_(that.delete_),
@@ -57,7 +63,7 @@ class unchecked_any {
   }
 
   constexpr ~unchecked_any() noexcept {
-    if (!valueless_after_move()) {
+    if (has_value()) {
       delete_(data_);
     }
   }
@@ -71,8 +77,8 @@ class unchecked_any {
   }
 
  public:
-  [[nodiscard]] constexpr auto valueless_after_move() const noexcept -> bool {
-    return delete_ == nullptr;
+  [[nodiscard]] constexpr auto has_value() const noexcept -> bool {
+    return delete_ != nullptr;
   }
 
  public:

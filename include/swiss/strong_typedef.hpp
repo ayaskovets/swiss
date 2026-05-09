@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 
 namespace swiss {
@@ -21,6 +22,7 @@ class strong_typedef {
 
  public:
   template <typename... Args>
+    requires(std::constructible_from<T, Args...>)
   explicit constexpr strong_typedef(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>)
       : underlying_(std::forward<Args>(args)...) {}

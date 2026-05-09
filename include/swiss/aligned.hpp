@@ -16,14 +16,11 @@ class alignas(Alignment) aligned {
   using const_pointer   = T const *;
 
  public:
-  constexpr aligned() noexcept(std::is_nothrow_default_constructible_v<T>)
-    requires(std::is_default_constructible_v<T>)
-      : value_() {}
-
-  explicit constexpr aligned(T value) noexcept(
-      std::is_nothrow_move_constructible_v<T>)
-    requires(std::constructible_from<T, T &&>)
-      : value_(std::move(value)) {}
+  template <typename... Args>
+    requires(std::constructible_from<T, Args...>)
+  explicit constexpr aligned(Args &&... args) noexcept(
+      std::is_nothrow_constructible_v<T, Args...>)
+      : value_(std::forward<Args>(args)...) {}
 
  public:
   constexpr auto operator*() noexcept -> T & { return value_; }

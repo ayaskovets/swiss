@@ -77,10 +77,10 @@ TEST(unchecked_any, move_constructor) {
   auto ptr = std::make_shared<int>(1);
   {
     swiss::unchecked_any pimpl(ptr);
-    EXPECT_FALSE(pimpl.valueless_after_move());
+    EXPECT_TRUE(pimpl.has_value());
 
     swiss::unchecked_any const moved_to(std::move(pimpl));
-    EXPECT_TRUE(pimpl.valueless_after_move());
+    EXPECT_FALSE(pimpl.has_value());
     EXPECT_EQ(ptr.use_count(), 2);
     EXPECT_EQ(moved_to.get<decltype(ptr)>(), ptr);
   }
@@ -91,11 +91,11 @@ TEST(unchecked_any, move_assignment) {
   auto ptr = std::make_shared<int>(1);
   {
     swiss::unchecked_any pimpl(ptr);
-    EXPECT_FALSE(pimpl.valueless_after_move());
+    EXPECT_TRUE(pimpl.has_value());
 
     swiss::unchecked_any moved_to(2);
     moved_to = std::move(pimpl);
-    EXPECT_TRUE(pimpl.valueless_after_move());
+    EXPECT_FALSE(pimpl.has_value());
     EXPECT_EQ(ptr.use_count(), 2);
     EXPECT_EQ(moved_to.get<decltype(ptr)>(), ptr);
   }

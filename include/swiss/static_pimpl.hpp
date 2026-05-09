@@ -25,6 +25,7 @@ class static_pimpl {
 
  public:
   template <typename... Args>
+    requires(std::constructible_from<T, Args...>)
   explicit constexpr static_pimpl(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>) {
     std::construct_at(operator->(), std::forward<Args>(args)...);
@@ -79,17 +80,6 @@ class static_pimpl {
 
   constexpr auto operator==(static_pimpl const & that) const noexcept -> bool {
     return operator*() == that.operator*();
-  }
-
- public:
-  template <typename... Args>
-  constexpr void emplace(Args &&... args) noexcept(
-      std::is_nothrow_constructible_v<T, Args...>)
-    requires std::constructible_from<T, Args...> &&
-             std::is_nothrow_destructible_v<T>
-  {
-    std::destroy_at(operator->());
-    std::construct_at(operator->(), std::forward<Args>(args)...);
   }
 
  public:

@@ -24,6 +24,8 @@ set(HEADERS
     include/swiss/dynamic_extent.hpp
     include/swiss/functional.hpp
     include/swiss/leak_detector_allocator.hpp
+    include/swiss/manual_lifetime.hpp
+    include/swiss/memory.hpp
     include/swiss/mixins.hpp
     include/swiss/os_kind.hpp
     include/swiss/predicates.hpp
@@ -34,7 +36,6 @@ set(HEADERS
     include/swiss/strong_typedef.hpp
     include/swiss/trivial_pair.hpp
     include/swiss/unchecked_any.hpp
-    include/swiss/manual_lifetime.hpp
     include/swiss/variadic_traits.hpp)
 
 # ------------------------------------------------------------------------------

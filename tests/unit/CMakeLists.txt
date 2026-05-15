@@ -29,6 +29,7 @@ set(SOURCES
     conditionally_runtime_test.cpp
     functional_test.cpp
     leak_detector_allocator_test.cpp
+    memory_test.cpp
     predicates_test.cpp
     scope_exit_test.cpp
     scope_fail_test.cpp

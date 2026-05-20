@@ -83,13 +83,13 @@ class unchecked_any {
 
  public:
   template <typename T>
-  constexpr auto get() noexcept -> T & {
-    return *static_cast<T *>(data_);
+  constexpr auto get() noexcept -> T * {
+    return static_cast<T *>(data_);
   }
 
   template <typename T>
-  constexpr auto get() const noexcept -> T const & {
-    return *static_cast<T *>(data_);
+  constexpr auto get() const noexcept -> T const * {
+    return static_cast<T *>(data_);
   }
 
   template <typename T>

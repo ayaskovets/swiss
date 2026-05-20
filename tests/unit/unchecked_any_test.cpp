@@ -19,7 +19,7 @@ TEST(unchecked_any, inplace_construction) {
   swiss::unchecked_any const value(std::in_place_type<std::string>,
                                    kSomeString);
   EXPECT_EQ(value.value<std::string>(), kSomeString);
-  EXPECT_EQ(value.get<std::string>().size(), kSomeString.size());
+  EXPECT_EQ(value.get<std::string>()->size(), kSomeString.size());
 }
 
 TEST(unchecked_any, construction) {
@@ -27,11 +27,11 @@ TEST(unchecked_any, construction) {
 
   swiss::unchecked_any value(kSomeString);
   EXPECT_EQ(value.value<std::string>(), kSomeString);
-  EXPECT_EQ(value.get<std::string>().size(), kSomeString.size());
+  EXPECT_EQ(value.get<std::string>()->size(), kSomeString.size());
 
   value = std::string(kSomeString);
   EXPECT_EQ(value.value<std::string>(), kSomeString);
-  EXPECT_EQ(value.get<std::string>().size(), kSomeString.size());
+  EXPECT_EQ(value.get<std::string>()->size(), kSomeString.size());
 }
 
 TEST(unchecked_any, destruction) {
@@ -39,7 +39,7 @@ TEST(unchecked_any, destruction) {
   {
     swiss::unchecked_any const pimpl(ptr);
     EXPECT_EQ(ptr.use_count(), 2);
-    EXPECT_EQ(pimpl.get<decltype(ptr)>(), ptr);
+    EXPECT_EQ(*pimpl.get<decltype(ptr)>(), ptr);
     EXPECT_EQ(pimpl.value<decltype(ptr)>(), ptr);
   }
   EXPECT_EQ(ptr.use_count(), 1);
@@ -54,8 +54,8 @@ TEST(unchecked_any, copy_constructor) {
     // NOLINTNEXTLINE(performance-unnecessary-copy-initialization)
     swiss::unchecked_any const copy(pimpl);
     EXPECT_EQ(ptr.use_count(), 3);
-    EXPECT_EQ(pimpl.get<decltype(ptr)>(), ptr);
-    EXPECT_EQ(pimpl.get<decltype(ptr)>(), copy.get<decltype(ptr)>());
+    EXPECT_EQ(*pimpl.get<decltype(ptr)>(), ptr);
+    EXPECT_EQ(*pimpl.get<decltype(ptr)>(), *copy.get<decltype(ptr)>());
   }
   EXPECT_EQ(ptr.use_count(), 1);
 }
@@ -67,8 +67,8 @@ TEST(unchecked_any, copy_assignment) {
     swiss::unchecked_any copy(2);
     copy = pimpl;
     EXPECT_EQ(ptr.use_count(), 3);
-    EXPECT_EQ(pimpl.get<decltype(ptr)>(), ptr);
-    EXPECT_EQ(pimpl.get<decltype(ptr)>(), copy.get<decltype(ptr)>());
+    EXPECT_EQ(*pimpl.get<decltype(ptr)>(), ptr);
+    EXPECT_EQ(*pimpl.get<decltype(ptr)>(), *copy.get<decltype(ptr)>());
   }
   EXPECT_EQ(ptr.use_count(), 1);
 }
@@ -82,7 +82,7 @@ TEST(unchecked_any, move_constructor) {
     swiss::unchecked_any const moved_to(std::move(pimpl));
     EXPECT_FALSE(pimpl.has_value());
     EXPECT_EQ(ptr.use_count(), 2);
-    EXPECT_EQ(moved_to.get<decltype(ptr)>(), ptr);
+    EXPECT_EQ(*moved_to.get<decltype(ptr)>(), ptr);
   }
   EXPECT_EQ(ptr.use_count(), 1);
 }
@@ -97,7 +97,7 @@ TEST(unchecked_any, move_assignment) {
     moved_to = std::move(pimpl);
     EXPECT_FALSE(pimpl.has_value());
     EXPECT_EQ(ptr.use_count(), 2);
-    EXPECT_EQ(moved_to.get<decltype(ptr)>(), ptr);
+    EXPECT_EQ(*moved_to.get<decltype(ptr)>(), ptr);
   }
   EXPECT_EQ(ptr.use_count(), 1);
 }
@@ -107,13 +107,13 @@ TEST(unchecked_any, value_assignment) {
   std::string const kAnotherString = "another string";
 
   swiss::unchecked_any value(kSomeString);
-  EXPECT_EQ(value.get<std::string>(), kSomeString);
+  EXPECT_EQ(*value.get<std::string>(), kSomeString);
 
-  value.get<std::string>() = kAnotherString;
-  EXPECT_EQ(value.get<std::string>(), kAnotherString);
+  *value.get<std::string>() = kAnotherString;
+  EXPECT_EQ(*value.get<std::string>(), kAnotherString);
 
-  value.get<std::string>() = kAnotherString;
-  EXPECT_EQ(value.get<std::string>(), kAnotherString);
+  *value.get<std::string>() = kAnotherString;
+  EXPECT_EQ(*value.get<std::string>(), kAnotherString);
 }
 
 }  // namespace tests::unit

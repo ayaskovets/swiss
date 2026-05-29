@@ -1,7 +1,8 @@
 #include <swiss/trivial_pair.hpp>
 
-#include <gtest/gtest.h>
 #include <utility>
+
+#include <gtest/gtest.h>
 
 namespace tests::unit {
 

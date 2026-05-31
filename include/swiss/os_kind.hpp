@@ -13,17 +13,21 @@ enum class os_kind : std::uint8_t {
   kUnix,
 };
 
-constexpr auto get_os_kind() noexcept -> os_kind {
 #ifdef _WIN32
-  return os_kind::kWindows;
+#define SWISS_OS_KIND kWindows
 #elif __APPLE__ || __MACH__
-  return os_kind::kMacOS;
+#define SWISS_OS_KIND kMacOS
 #elif __linux__
-  return os_kind::kLinux;
+#define SWISS_OS_KINDeturn kLinux
 #elif __FreeBSD__
-  return os_kind::kFreeBSD;
+#define SWISS_OS_KIND kFreeBSD
 #elif __unix || __unix__
-  return os_kind::kUnix;
+#define SWISS_OS_KIND kUnix
+#endif
+
+constexpr auto get_os_kind() noexcept -> os_kind {
+#ifdef SWISS_OS_KIND
+  return os_kind::SWISS_OS_KIND;
 #else
   static_assert(false, "get_os_kind::unknown os");
 #endif

@@ -13,17 +13,21 @@ enum class cpu_arch : std::uint8_t {
   kPowerPC
 };
 
-constexpr auto get_cpu_arch() noexcept -> cpu_arch {
 #if defined(__x86_64__) || defined(_M_X64)
-  return cpu_arch::kx86_64;
+#define SWISS_CPU_ARCH kx86_64
 #elif defined(__i386__) || defined(_M_IX86)
-  return cpu_arch::kx86_32;
+#define SWISS_CPU_ARCH kx86_32
 #elif defined(__aarch64__) || defined(_M_ARM64)
-  return cpu_arch::kARM64;
+#define SWISS_CPU_ARCH kARM64
 #elif defined(__arm__) || defined(_M_ARM)
-  return cpu_arch::ARM32;
+#define SWISS_CPU_ARCH ARM32
 #elif defined(__powerpc__)
-  return cpu_arch::kPowerPC;
+#define SWISS_CPU_ARCH kPowerPC
+#endif
+
+constexpr auto get_cpu_arch() noexcept -> cpu_arch {
+#ifdef SWISS_CPU_ARCH
+  return cpu_arch::SWISS_CPU_ARCH;
 #else
   static_assert(false, "get_cpu_arch::unknown cpu arch");
 #endif

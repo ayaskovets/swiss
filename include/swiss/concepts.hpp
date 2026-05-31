@@ -23,4 +23,7 @@ concept not_same_as = !std::same_as<T, Other>;
 template <typename T, typename Other>
 concept not_convertible_to = !std::convertible_to<T, Other>;
 
+template <typename T, typename Other>
+concept decay_same_as = std::same_as<std::decay_t<T>, Other>;
+
 }  // namespace swiss

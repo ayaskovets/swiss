@@ -25,6 +25,7 @@ set(HEADERS
     include/swiss/functional.hpp
     include/swiss/leak_detector_allocator.hpp
     include/swiss/manual_lifetime.hpp
+    include/swiss/math.hpp
     include/swiss/memory.hpp
     include/swiss/mixins.hpp
     include/swiss/os_kind.hpp

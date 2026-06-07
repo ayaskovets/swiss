@@ -10,7 +10,7 @@ enum class cpu_arch : std::uint8_t {
   kx86_32,
   kARM64,
   kARM32,
-  kPowerPC
+  kPowerPC,
 };
 
 #if defined(__x86_64__) || defined(_M_X64)

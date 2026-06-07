@@ -29,6 +29,7 @@ set(SOURCES
     conditionally_runtime_test.cpp
     functional_test.cpp
     leak_detector_allocator_test.cpp
+    manual_lifetime_test.cpp
     memory_test.cpp
     predicates_test.cpp
     scope_exit_test.cpp
@@ -37,7 +38,6 @@ set(SOURCES
     strong_typedef_test.cpp
     trivial_pair_test.cpp
     unchecked_any_test.cpp
-    manual_lifetime_test.cpp
     variadic_traits_test.cpp)
 
 # ------------------------------------------------------------------------------

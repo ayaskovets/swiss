@@ -1,6 +1,8 @@
 #pragma once
 
 #include <concepts>
+#include <cstddef>
+#include <functional>
 
 namespace swiss {
 
@@ -44,5 +46,33 @@ constexpr void assign_invoke_result_if_not_void(
                       std::forward<Args>(args)...);
   }
 }
+
+template <typename Ret, typename... Args>
+class noexcept_function : public std::function<Ret(Args...)> {
+ public:
+  constexpr noexcept_function() = default;
+
+  template <std::invocable<Args...> Callable>
+    requires(std::is_nothrow_invocable_v<Callable, Args...>)
+  explicit constexpr noexcept_function(Callable && callable)
+      : std::function<Ret(Args...)>(std::forward<Callable>(callable)) {}
+
+  template <std::invocable<Args...> Callable>
+    requires(std::is_nothrow_invocable_v<Callable, Args...>)
+  constexpr auto operator=(Callable && callable) -> noexcept_function & {
+    std::function<Ret(Args...)>::operator=(std::forward<Callable>(callable));
+    return *this;
+  }
+
+  constexpr auto operator=(std::nullptr_t) noexcept -> noexcept_function & {
+    std::function<Ret(Args...)>::operator=(nullptr);
+    return *this;
+  }
+
+ public:
+  auto operator()(Args &&... args) const noexcept -> Ret {
+    return operator()(std::forward<Args>(args)...);
+  }
+};
 
 }  // namespace swiss

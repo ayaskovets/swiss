@@ -1,5 +1,7 @@
 #include <swiss/functional.hpp>
 
+#include <type_traits>
+
 #include <gtest/gtest.h>
 
 namespace tests::unit {
@@ -67,6 +69,19 @@ TEST(functional, assign_invoke_result_if_not_void) {
 
   swiss::assign_invoke_result_if_not_void(ret, int_result_t, int{});
   EXPECT_EQ(ret, 2);
+}
+
+TEST(functional, noexcept_function) {
+  swiss::noexcept_function<int, float> function(
+      [](int arg) noexcept -> float { return static_cast<float>(arg); });
+
+  function = nullptr;
+  EXPECT_FALSE(function);
+
+  function = [](int) noexcept -> float { return 0.F; };
+  EXPECT_TRUE(function);
+
+  static_assert(std::is_nothrow_invocable_v<decltype(function), int>);
 }
 
 }  // namespace tests::unit

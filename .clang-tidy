@@ -6,6 +6,7 @@ Checks: "*,
         -readability-named-parameter,
         -hicpp-named-parameter,
         -readability-magic-numbers,
-        -hicpp-special-member-functions"
+        -hicpp-special-member-functions,
+        -hicpp-explicit-conversions"
 FormatStyle: none
 WarningsAsErrors: "*"

@@ -54,7 +54,8 @@ class noexcept_function : public std::function<Ret(Args...)> {
 
   template <std::invocable<Args...> Callable>
     requires(std::is_nothrow_invocable_v<Callable, Args...>)
-  explicit constexpr noexcept_function(Callable && callable)
+  // NOLINTNEXTLINE(google-explicit-constructor)
+  constexpr noexcept_function(Callable && callable)
       : std::function<Ret(Args...)>(std::forward<Callable>(callable)) {}
 
   template <std::invocable<Args...> Callable>

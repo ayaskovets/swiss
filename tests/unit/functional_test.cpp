@@ -82,6 +82,8 @@ TEST(functional, noexcept_function) {
   EXPECT_TRUE(function);
 
   static_assert(std::is_nothrow_invocable_v<decltype(function), int>);
+
+  EXPECT_EQ(function(42), 0.F);
 }
 
 }  // namespace tests::unit

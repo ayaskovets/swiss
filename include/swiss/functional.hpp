@@ -72,7 +72,7 @@ class noexcept_function : public std::function<Ret(Args...)> {
 
  public:
   auto operator()(Args &&... args) const noexcept -> Ret {
-    return operator()(std::forward<Args>(args)...);
+    return std::function<Ret(Args...)>::operator()(std::forward<Args>(args)...);
   }
 };
 

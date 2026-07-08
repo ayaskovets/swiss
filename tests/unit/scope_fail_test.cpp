@@ -6,7 +6,7 @@ namespace tests::unit {
 
 TEST(scope_fail, nothrow_destructor) {
   bool flag    = false;
-  auto finally = [&flag]() noexcept { flag = true; };
+  auto finally = [&flag]() noexcept -> void { flag = true; };
 
   {
     // NOLINTNEXTLINE(readability-identifier-length)
@@ -19,7 +19,7 @@ TEST(scope_fail, nothrow_destructor) {
 
 TEST(scope_fail, throw_destructor) {
   bool flag    = false;
-  auto finally = [&flag]() noexcept { flag = true; };
+  auto finally = [&flag]() noexcept -> void { flag = true; };
 
   try {
     // NOLINTNEXTLINE(readability-identifier-length)

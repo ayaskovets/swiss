@@ -25,7 +25,7 @@ class leak_detector_allocator : public std::allocator<T> {
   constexpr auto allocate(std::size_t const n) -> T * {
     T * const ptr = std::allocator<T>::allocate(n);
 
-    auto const store_allocation_to = [ptr, n](auto & allocations) {
+    auto const store_allocation_to = [ptr, n](auto & allocations) -> void {
       if (allocations.count(ptr)) [[unlikely]] {
         throw std::runtime_error(std::format(
             "leak_detector_allocator::allocate(): double alloc {:p}",
@@ -50,7 +50,7 @@ class leak_detector_allocator : public std::allocator<T> {
   }
 
   constexpr void deallocate(T * const ptr, std::size_t const n) {
-    auto const erase_allocation_from = [ptr, n](auto & allocations) {
+    auto const erase_allocation_from = [ptr, n](auto & allocations) -> void {
       auto const allocation = allocations.find(ptr);
       if (allocation == allocations.end()) [[unlikely]] {
         throw std::runtime_error(std::format(

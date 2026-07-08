@@ -6,7 +6,7 @@ namespace tests::unit {
 
 TEST(scope_exit, destructor) {
   bool flag    = false;
-  auto finally = [&flag]() noexcept { flag = true; };
+  auto finally = [&flag]() noexcept -> void { flag = true; };
 
   {
     // NOLINTNEXTLINE(readability-identifier-length)

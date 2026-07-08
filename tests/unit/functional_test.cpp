@@ -9,7 +9,7 @@ namespace tests::unit {
 TEST(functional, invoke_tail_func) {
   // NOLINTBEGIN(readability-identifier-length)
   auto const invocable = [](int const & i, char const &,
-                            float const &) noexcept { return i; };
+                            float const &) noexcept -> int { return i; };
 
   std::string const s{};
   int const i   = 1;
@@ -58,9 +58,9 @@ TEST(functional, invoke_tail_class) {
 }
 
 TEST(functional, assign_invoke_result_if_not_void) {
-  auto const void_result_t = [](int) {};
+  auto const void_result_t = [](int) -> void {};
 
-  auto const int_result_t = [](int) { return 2; };
+  auto const int_result_t = [](int) -> int { return 2; };
 
   int ret = 0;
 

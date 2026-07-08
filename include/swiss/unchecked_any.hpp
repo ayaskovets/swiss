@@ -29,7 +29,7 @@ class unchecked_any {
       std::in_place_type_t<T>,
       Args &&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
     requires(std::constructible_from<T, Args...>)
-      : delete_([](void * const ptr) noexcept {
+      : delete_([](void * const ptr) noexcept -> void {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
           delete static_cast<T * const>(ptr);
         }),

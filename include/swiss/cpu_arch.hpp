@@ -29,7 +29,7 @@ constexpr auto get_cpu_arch() noexcept -> cpu_arch {
 #ifdef SWISS_CPU_ARCH
   return cpu_arch::SWISS_CPU_ARCH;
 #else
-  static_assert(false, "get_cpu_arch::unknown cpu arch");
+  static_assert(false, "get_cpu_arch(): unknown cpu arch");
 #endif
 }
 

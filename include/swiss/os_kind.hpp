@@ -29,7 +29,7 @@ constexpr auto get_os_kind() noexcept -> os_kind {
 #ifdef SWISS_OS_KIND
   return os_kind::SWISS_OS_KIND;
 #else
-  static_assert(false, "get_os_kind::unknown os");
+  static_assert(false, "get_os_kind(): unknown os");
 #endif
 }
 

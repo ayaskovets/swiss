@@ -9,52 +9,54 @@ namespace swiss {
  * @brief A boilerplate class that each C++ developer has written at least once.
  * Used for logging special member function calls to std::ostream
  */
-class RuleOfFiveLogger {
+class rule_of_five_logger {
  private:
   static constexpr auto const kMovedFromTag = "<moved>";
 
  public:
-  explicit constexpr RuleOfFiveLogger(std::ostream & ostream,
-                                      std::string tag) noexcept
+  explicit constexpr rule_of_five_logger(std::ostream & ostream,
+                                         std::string tag) noexcept
       : ostream_(ostream), tag_(std::move(tag)) {
-    ostream_ << "RuleOfFiveLogger::RuleOfFiveLogger({" << tag_ << "})\n";
+    ostream_ << "rule_of_five_logger::rule_of_five_logger({" << tag_ << "})\n";
   }
 
-  constexpr RuleOfFiveLogger(RuleOfFiveLogger const & that) noexcept
+  constexpr rule_of_five_logger(rule_of_five_logger const & that) noexcept
       : ostream_(that.ostream_), tag_(that.tag_) {
-    ostream_ << "RuleOfFiveLogger::RuleOfFiveLogger(RuleOfFiveLogger const&{"
+    ostream_ << "rule_of_five_logger::rule_of_five_logger(rule_of_five_logger "
+                "const&{"
              << that.tag_ << "})\n";
   }
 
-  constexpr RuleOfFiveLogger(RuleOfFiveLogger && that) noexcept
+  constexpr rule_of_five_logger(rule_of_five_logger && that) noexcept
       : ostream_(that.ostream_), tag_(std::move(that.tag_)) {
-    ostream_ << "RuleOfFiveLogger::RuleOfFiveLogger(RuleOfFiveLogger &&{"
-             << that.tag_ << "})\n";
+    ostream_
+        << "rule_of_five_logger::rule_of_five_logger(rule_of_five_logger &&{"
+        << that.tag_ << "})\n";
     that.tag_ = kMovedFromTag;
   }
 
-  constexpr auto operator=(RuleOfFiveLogger const & that) noexcept
-      -> RuleOfFiveLogger & {
+  constexpr auto operator=(rule_of_five_logger const & that) noexcept
+      -> rule_of_five_logger & {
     if (this != &that) {
-      new (this) RuleOfFiveLogger(that);
+      new (this) rule_of_five_logger(that);
     }
-    ostream_ << "RuleOfFiveLogger::operator=(RuleOfFiveLogger const&{"
+    ostream_ << "rule_of_five_logger::operator=(rule_of_five_logger const&{"
              << that.tag_ << "})\n";
     return *this;
   }
 
-  constexpr auto operator=(RuleOfFiveLogger && that) noexcept
-      -> RuleOfFiveLogger & {
+  constexpr auto operator=(rule_of_five_logger && that) noexcept
+      -> rule_of_five_logger & {
     if (this != &that) {
-      new (this) RuleOfFiveLogger(std::move(that));
+      new (this) rule_of_five_logger(std::move(that));
     }
-    ostream_ << "RuleOfFiveLogger::operator=(RuleOfFiveLogger &&{" << that.tag_
-             << "})\n";
+    ostream_ << "rule_of_five_logger::operator=(rule_of_five_logger &&{"
+             << that.tag_ << "})\n";
     return *this;
   }
 
-  constexpr ~RuleOfFiveLogger() noexcept {
-    ostream_ << "RuleOfFiveLogger::~RuleOfFiveLogger({" << tag_ << "})\n";
+  constexpr ~rule_of_five_logger() noexcept {
+    ostream_ << "rule_of_five_logger::~rule_of_five_logger({" << tag_ << "})\n";
   }
 
  private:

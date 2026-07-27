@@ -13,6 +13,7 @@ namespace swiss {
  * the requested type is the same as stored and subsequently does not throw any
  * exceptions. Converting the stored memory to an invalid type is UB
  */
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class unchecked_any {
  public:
   constexpr unchecked_any() noexcept
@@ -43,21 +44,16 @@ class unchecked_any {
         data_(that.clone_(that.data_)),
         clone_(that.clone_) {}
 
-  constexpr auto operator=(unchecked_any const & that) -> unchecked_any & {
-    if (this != &that) {
-      new (this) unchecked_any(that);
-    }
-    return *this;
-  }
-
   constexpr unchecked_any(unchecked_any && that) noexcept
       : delete_(std::exchange(that.delete_, nullptr)),
         data_(std::exchange(that.data_, nullptr)),
         clone_(std::exchange(that.clone_, nullptr)) {}
 
-  constexpr auto operator=(unchecked_any && that) noexcept -> unchecked_any & {
+  constexpr auto operator=(unchecked_any that) -> unchecked_any & {
     if (this != &that) {
-      new (this) unchecked_any(std::move(that));
+      std::swap(this->delete_, that.delete_);
+      std::swap(this->data_, that.data_);
+      std::swap(this->clone_, that.clone_);
     }
     return *this;
   }
@@ -72,7 +68,7 @@ class unchecked_any {
   template <typename T>
   constexpr auto operator=(T value) noexcept(
       std::is_nothrow_move_constructible_v<T>) -> unchecked_any & {
-    new (this) unchecked_any(std::move(value));
+    *this = unchecked_any(std::move(value));
     return *this;
   }
 

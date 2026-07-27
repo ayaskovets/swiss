@@ -8,6 +8,7 @@ namespace swiss {
 /**
  * @brief A boilerplate class that each C++ developer has written at least once.
  * Used for logging special member function calls to std::ostream
+ * @note Output stream reference is attached to the object and is immutable
  */
 class rule_of_five_logger {
  private:
@@ -38,7 +39,7 @@ class rule_of_five_logger {
   constexpr auto operator=(rule_of_five_logger const & that) noexcept
       -> rule_of_five_logger & {
     if (this != &that) {
-      new (this) rule_of_five_logger(that);
+      tag_ = that.tag_;
     }
     ostream_ << "rule_of_five_logger::operator=(rule_of_five_logger const&{"
              << that.tag_ << "})\n";
@@ -48,7 +49,7 @@ class rule_of_five_logger {
   constexpr auto operator=(rule_of_five_logger && that) noexcept
       -> rule_of_five_logger & {
     if (this != &that) {
-      new (this) rule_of_five_logger(std::move(that));
+      tag_ = that.tag_;
     }
     ostream_ << "rule_of_five_logger::operator=(rule_of_five_logger &&{"
              << that.tag_ << "})\n";

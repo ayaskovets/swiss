@@ -13,4 +13,16 @@ template <std::size_t Index, typename... Args>
   return std::get<Index>(std::forward_as_tuple(std::forward<Args>(args)...));
 }
 
+/**
+ * @brief Get n-th type of a non-empty variadic template pack
+ */
+template <std::size_t N, typename... Args>
+using variadic_nth_t = std::tuple_element_t<N, std::tuple<Args...>>;
+
+/**
+ * @brief Get first type of a non-empty variadic template pack
+ */
+template <typename... Args>
+using variadic_head_t = variadic_nth_t<0, Args...>;
+
 }  // namespace swiss

@@ -17,6 +17,7 @@ add_library(swiss::swiss ALIAS swiss)
 
 set(HEADERS
     include/swiss/aligned.hpp
+    include/swiss/chrono.hpp
     include/swiss/concepts.hpp
     include/swiss/conditionally_runtime.hpp
     include/swiss/coroutine.hpp

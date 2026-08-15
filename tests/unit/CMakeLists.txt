@@ -26,6 +26,7 @@ add_executable(swiss-unit-tests)
 
 set(SOURCES
     aligned_test.cpp
+    chrono_test.cpp
     conditionally_runtime_test.cpp
     functional_test.cpp
     leak_detector_allocator_test.cpp

@@ -14,7 +14,7 @@ class mocked_clock final {
   using duration   = Base::duration;
   using rep        = duration::rep;
   using period     = duration::period;
-  using time_point = std::chrono::time_point<Base>;
+  using time_point = std::chrono::time_point<mocked_clock>;
 
  public:
   static constexpr auto now() noexcept -> time_point { return now_; }
@@ -24,7 +24,7 @@ class mocked_clock final {
   }
 
  private:
-  static inline time_point now_ = Base::now();
+  static inline time_point now_;
 };
 
 }  // namespace swiss

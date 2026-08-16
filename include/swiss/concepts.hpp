@@ -28,7 +28,8 @@ concept decay_same_as = std::same_as<std::decay_t<T>, Other>;
 
 template <typename T, template <typename...> class Template>
 concept instantiation_of = requires {
-  []<typename... Args>(Template<Args...>) noexcept -> void {}(T{});
+  []<typename... Args>(Template<Args...>) noexcept -> void {
+  }(std::declval<T>());
 };
 
 }  // namespace swiss

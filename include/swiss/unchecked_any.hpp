@@ -9,6 +9,7 @@ namespace swiss {
 
 /**
  * @brief Type-erased pimpl with value semantics
+ * @note Noexcept if the copy allocation does not throw exceptions
  * @warning This type is different from std::any in that it does not check that
  * the requested type is the same as stored and subsequently does not throw any
  * exceptions. Converting the stored memory to an invalid type is UB
@@ -41,8 +42,7 @@ class unchecked_any {
 
   constexpr unchecked_any(unchecked_any const & that)
       : delete_(that.delete_),
-        data_(static_cast<bool>(that.clone_) ? that.clone_(that.data_)
-                                             : nullptr),
+        data_((that.clone_ != nullptr) ? that.clone_(that.data_) : nullptr),
         clone_(that.clone_) {}
 
   constexpr unchecked_any(unchecked_any && that) noexcept

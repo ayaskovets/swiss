@@ -5,7 +5,6 @@
 #include <gtest/gtest.h>
 
 namespace tests::unit {
-// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
 TEST(mocked_clock, smoke) {
   auto const now = swiss::mocked_clock<>::now();

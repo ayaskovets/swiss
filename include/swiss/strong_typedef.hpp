@@ -16,7 +16,7 @@ class strong_typedef {
  public:
   using value_type      = T;
   using reference       = T &;
-  using const_reference = T &;
+  using const_reference = T const &;
   using pointer         = T *;
   using const_pointer   = T const *;
 
@@ -32,11 +32,13 @@ class strong_typedef {
       -> auto = default;
 
  public:
-  constexpr auto operator*() noexcept -> T & { return underlying_; }
-  constexpr auto operator*() const noexcept -> T const & { return underlying_; }
+  constexpr auto operator*() noexcept -> reference { return underlying_; }
+  constexpr auto operator*() const noexcept -> const_reference {
+    return underlying_;
+  }
 
-  constexpr auto operator->() noexcept -> T * { return &underlying_; }
-  constexpr auto operator->() const noexcept -> T const * {
+  constexpr auto operator->() noexcept -> pointer { return &underlying_; }
+  constexpr auto operator->() const noexcept -> const_pointer {
     return &underlying_;
   }
 

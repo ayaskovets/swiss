@@ -8,21 +8,29 @@ namespace swiss {
 /**
  * @brief Simple leak detecting allocator. If IsShared=true allocations are
  * stored on per-allocator-class basis rather than per-allocator-variable
+ * @note Not thread safe
  */
 template <typename T, bool IsShared = false>
 class leak_detector_allocator : public std::allocator<T> {
  public:
   using value_type      = T;
   using reference       = T &;
-  using const_reference = T &;
+  using const_reference = T const &;
   using pointer         = T *;
   using const_pointer   = T const *;
+
+ public:
+  template <typename To>
+  class rebind {
+   public:
+    using other = leak_detector_allocator<To, IsShared>;
+  };
 
  public:
   using std::allocator<T>::allocator;
 
  public:
-  constexpr auto allocate(std::size_t const n) -> T * {
+  constexpr auto allocate(std::size_t const n) -> pointer {
     T * const ptr = std::allocator<T>::allocate(n);
 
     auto const store_allocation_to = [ptr, n](auto & allocations) -> void {
@@ -63,7 +71,7 @@ class leak_detector_allocator : public std::allocator<T> {
       if (leaked_bytes != 0) [[unlikely]] {
         throw std::runtime_error(std::format(
             "leak_detector_allocator::deallocate(): leaked {} bytes {:p}",
-            leaked_bytes, static_cast<void const * const>(ptr)));
+            leaked_bytes * sizeof(T), static_cast<void const * const>(ptr)));
       }
 
       allocations.erase(allocation);
@@ -77,13 +85,6 @@ class leak_detector_allocator : public std::allocator<T> {
 
     std::allocator<T>::deallocate(ptr, n);
   }
-
- public:
-  template <typename To>
-  class rebind {
-   public:
-    using other = leak_detector_allocator<To, IsShared>;
-  };
 
  public:
   constexpr void clear() noexcept {

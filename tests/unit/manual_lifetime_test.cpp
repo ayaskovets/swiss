@@ -31,7 +31,7 @@ TEST(manual_lifetime, lifetime_leak) {
     {
       swiss::manual_lifetime<StaticCounter> value;
       EXPECT_EQ(StaticCounter::counter, 1);
-      std::construct_at(value.data());
+      std::construct_at(value.operator->());
       EXPECT_EQ(StaticCounter::counter, 2);
     }
 
@@ -40,9 +40,9 @@ TEST(manual_lifetime, lifetime_leak) {
     {
       swiss::manual_lifetime<StaticCounter> value;
       EXPECT_EQ(StaticCounter::counter, 2);
-      std::construct_at(value.data());
+      std::construct_at(value.operator->());
       EXPECT_EQ(StaticCounter::counter, 3);
-      std::destroy_at(value.data());
+      std::destroy_at(value.operator->());
       EXPECT_EQ(StaticCounter::counter, 2);
     }
   }

@@ -3,6 +3,7 @@
 #include <concepts>
 #include <cstddef>
 #include <functional>
+#include <stdexcept>
 
 namespace swiss {
 
@@ -49,30 +50,53 @@ constexpr void assign_invoke_result_if_not_void(
 
 template <typename Ret, typename... Args>
 class noexcept_function : public std::function<Ret(Args...)> {
- public:
-  constexpr noexcept_function() = default;
+ private:
+  using base = std::function<Ret(Args...)>;
 
+ public:
+  constexpr noexcept_function()                     = delete;
+  constexpr noexcept_function(noexcept_function &&) = delete;
+  constexpr auto operator=(noexcept_function &&)
+      -> noexcept_function & = delete;
+
+ public:
+  constexpr noexcept_function(noexcept_function const &) = default;
+  constexpr auto operator=(noexcept_function const &)
+      -> noexcept_function & = default;
+
+ public:
   template <std::invocable<Args...> Callable>
-    requires(std::is_nothrow_invocable_v<Callable, Args...>)
   // NOLINTNEXTLINE(google-explicit-constructor)
   constexpr noexcept_function(Callable && callable)
-      : std::function<Ret(Args...)>(std::forward<Callable>(callable)) {}
-
-  template <std::invocable<Args...> Callable>
-    requires(std::is_nothrow_invocable_v<Callable, Args...>)
-  constexpr auto operator=(Callable && callable) -> noexcept_function & {
-    std::function<Ret(Args...)>::operator=(std::forward<Callable>(callable));
-    return *this;
+    requires(std::is_nothrow_invocable_v<Callable, Args...> &&
+             !std::same_as<std::decay_t<decltype(callable)>, noexcept_function>)
+      : base(std::forward<Callable>(callable)) {
+    if (!base::operator bool()) {
+      throw std::invalid_argument(
+          "noexcept_function::noexcept_function(): callable must not be null");
+    }
   }
 
-  constexpr auto operator=(std::nullptr_t) noexcept -> noexcept_function & {
-    std::function<Ret(Args...)>::operator=(nullptr);
+  constexpr ~noexcept_function() = default;
+
+ public:
+  constexpr auto operator=(auto && callable) -> noexcept_function &
+    requires(!std::same_as<std::decay_t<decltype(callable)>, noexcept_function>)
+  {
+    base const that(std::forward<decltype(callable)>(callable));
+
+    if (!that) {
+      throw std::invalid_argument(
+          "noexcept_function::operator=(): callable must not be null");
+    }
+
+    base::operator=(std::move(that));
     return *this;
   }
 
  public:
-  auto operator()(Args &&... args) const noexcept -> Ret {
-    return std::function<Ret(Args...)>::operator()(std::forward<Args>(args)...);
+  auto operator()(auto &&... args) const noexcept -> Ret {
+    return base::operator()(std::forward<decltype(args)>(args)...);
   }
 };
 

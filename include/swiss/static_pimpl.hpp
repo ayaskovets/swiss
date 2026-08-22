@@ -19,7 +19,7 @@ class static_pimpl {
  public:
   using value_type      = T;
   using reference       = T &;
-  using const_reference = T &;
+  using const_reference = T const &;
   using pointer         = T *;
   using const_pointer   = T const *;
 
@@ -83,20 +83,20 @@ class static_pimpl {
   }
 
  public:
-  constexpr auto operator*() noexcept -> T & {
+  constexpr auto operator*() noexcept -> reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     return *std::launder(reinterpret_cast<T *>(impl_.data()));
   }
-  constexpr auto operator*() const noexcept -> T const & {
+  constexpr auto operator*() const noexcept -> const_reference {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     return *std::launder(reinterpret_cast<T const *>(impl_.data()));
   }
 
-  constexpr auto operator->() noexcept -> T * {
+  constexpr auto operator->() noexcept -> pointer {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     return std::launder(reinterpret_cast<T *>(impl_.data()));
   }
-  constexpr auto operator->() const noexcept -> T const * {
+  constexpr auto operator->() const noexcept -> const_pointer {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     return std::launder(reinterpret_cast<T const *>(impl_.data()));
   }

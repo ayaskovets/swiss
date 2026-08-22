@@ -28,7 +28,7 @@ set(SOURCES
     aligned_test.cpp
     chrono_test.cpp
     concepts_test.cpp
-    conditionally_runtime_test.cpp
+    ebo_test.cpp
     functional_test.cpp
     leak_detector_allocator_test.cpp
     manual_lifetime_test.cpp

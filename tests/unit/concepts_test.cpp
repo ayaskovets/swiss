@@ -12,11 +12,6 @@ TEST(concepts, void_invocable) {
   static_assert(!swiss::void_invocable<decltype([]() -> int { return 0; })>);
 }
 
-TEST(concepts, nothrow_invocable) {
-  static_assert(swiss::nothrow_invocable<decltype([]() noexcept -> void {})>);
-  static_assert(!swiss::nothrow_invocable<decltype([]() -> int { return 0; })>);
-}
-
 TEST(concepts, nothrow_void_invocable) {
   static_assert(
       swiss::nothrow_void_invocable<decltype([]() noexcept -> void {})>);

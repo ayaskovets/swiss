@@ -72,11 +72,8 @@ TEST(functional, assign_invoke_result_if_not_void) {
 }
 
 TEST(functional, noexcept_function) {
-  swiss::noexcept_function<int, float> function(
+  swiss::noexcept_function<float, int> function(
       [](int arg) noexcept -> float { return static_cast<float>(arg); });
-
-  function = nullptr;
-  EXPECT_FALSE(function);
 
   function = [](int) noexcept -> float { return 0.F; };
   EXPECT_TRUE(function);
@@ -84,6 +81,9 @@ TEST(functional, noexcept_function) {
   static_assert(std::is_nothrow_invocable_v<decltype(function), int>);
 
   EXPECT_EQ(function(42), 0.F);
+
+  swiss::noexcept_function<float, int> const copy(function);
+  EXPECT_EQ(copy(42), 0.F);
 }
 
 }  // namespace tests::unit

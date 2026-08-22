@@ -30,9 +30,9 @@ class unchecked_any {
       std::in_place_type_t<T>,
       Args &&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
     requires(std::constructible_from<T, Args...>)
-      : delete_([](void * const ptr) noexcept -> void {
+      : delete_([](void * ptr) noexcept -> void {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
-          delete static_cast<T * const>(ptr);
+          delete static_cast<T *>(ptr);
         }),
         data_(new T(std::forward<Args>(args)...)),
         clone_([](void const * const ptr) -> void * {
@@ -41,7 +41,8 @@ class unchecked_any {
 
   constexpr unchecked_any(unchecked_any const & that)
       : delete_(that.delete_),
-        data_(that.clone_(that.data_)),
+        data_(static_cast<bool>(that.clone_) ? that.clone_(that.data_)
+                                             : nullptr),
         clone_(that.clone_) {}
 
   constexpr unchecked_any(unchecked_any && that) noexcept
@@ -50,11 +51,9 @@ class unchecked_any {
         clone_(std::exchange(that.clone_, nullptr)) {}
 
   constexpr auto operator=(unchecked_any that) -> unchecked_any & {
-    if (this != &that) {
-      std::swap(this->delete_, that.delete_);
-      std::swap(this->data_, that.data_);
-      std::swap(this->clone_, that.clone_);
-    }
+    std::swap(this->delete_, that.delete_);
+    std::swap(this->data_, that.data_);
+    std::swap(this->clone_, that.clone_);
     return *this;
   }
 
@@ -85,14 +84,14 @@ class unchecked_any {
 
   template <typename T>
   constexpr auto get() const noexcept -> T const * {
-    return static_cast<T *>(data_);
+    return static_cast<T const *>(data_);
   }
 
   template <typename T>
   constexpr auto value() const noexcept -> T
     requires std::is_copy_constructible_v<T>
   {
-    return *static_cast<T *>(data_);
+    return *static_cast<T const *>(data_);
   }
 
  private:

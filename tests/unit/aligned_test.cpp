@@ -19,6 +19,11 @@ TEST(aligned, constructor) {
   swiss::aligned<std::size_t, 16>(2U);
 }
 
+TEST(aligned, comparison) {
+  EXPECT_EQ((swiss::aligned<int, 32>(1)), (swiss::aligned<int, 32>(1)));
+  EXPECT_NE((swiss::aligned<int, 32>(1)), (swiss::aligned<int, 32>(2)));
+}
+
 TEST(aligned, dereference) {
   swiss::aligned<int, 16> value(1);
   static_assert(std::is_same_v<decltype(*value), int &>);

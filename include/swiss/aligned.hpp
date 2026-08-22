@@ -7,11 +7,12 @@
 namespace swiss {
 
 template <typename T, std::size_t Alignment>
+  requires(Alignment >= alignof(T))
 class alignas(Alignment) aligned {
  public:
   using value_type      = T;
   using reference       = T &;
-  using const_reference = T &;
+  using const_reference = T const &;
   using pointer         = T *;
   using const_pointer   = T const *;
 
@@ -23,13 +24,21 @@ class alignas(Alignment) aligned {
       : value_(std::forward<Args>(args)...) {}
 
  public:
-  constexpr auto operator*() noexcept -> T & { return value_; }
-  constexpr auto operator*() const noexcept -> T const & { return value_; }
-  constexpr auto operator->() noexcept -> T * { return &value_; };
-  constexpr auto operator->() const noexcept -> T const * { return &value_; };
+  constexpr auto operator<=>(aligned const & that) const noexcept = default;
+
+ public:
+  constexpr auto operator*() noexcept -> reference { return value_; }
+  constexpr auto operator*() const noexcept -> const_reference {
+    return value_;
+  }
+
+  constexpr auto operator->() noexcept -> pointer { return &value_; };
+  constexpr auto operator->() const noexcept -> const_pointer {
+    return &value_;
+  }
 
  private:
-  T value_;
+  alignas(Alignment) T value_;
 };
 
 }  // namespace swiss

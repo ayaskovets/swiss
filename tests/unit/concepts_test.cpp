@@ -38,5 +38,10 @@ TEST(concepts, instantiation_of) {
   static_assert(swiss::instantiation_of<std::vector<int>, std::vector>);
 }
 
+TEST(concepts, one_of) {
+  static_assert(swiss::one_of<int, float, char, int>);
+  static_assert(!swiss::one_of<int, float, char, double>);
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 }  // namespace tests::unit

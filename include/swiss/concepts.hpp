@@ -28,4 +28,7 @@ concept instantiation_of = requires {
   }(std::declval<std::decay_t<T>>());
 };
 
+template <typename T, typename... Types>
+concept one_of = (std::same_as<T, Types> || ...);
+
 }  // namespace swiss

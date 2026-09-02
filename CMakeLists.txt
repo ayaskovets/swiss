@@ -32,6 +32,7 @@ set(HEADERS
     include/swiss/memory.hpp
     include/swiss/mixins.hpp
     include/swiss/os_kind.hpp
+    include/swiss/overloaded.hpp
     include/swiss/predicates.hpp
     include/swiss/rule_of_five_logger.hpp
     include/swiss/scope_exit.hpp

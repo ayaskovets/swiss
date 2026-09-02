@@ -34,6 +34,7 @@ set(SOURCES
     leak_detector_allocator_test.cpp
     manual_lifetime_test.cpp
     memory_test.cpp
+    overloaded_test.cpp
     predicates_test.cpp
     scope_exit_test.cpp
     scope_fail_test.cpp

@@ -29,6 +29,7 @@ set(SOURCES
     chrono_test.cpp
     concepts_test.cpp
     ebo_test.cpp
+    frozen_flat_set_test.cpp
     functional_test.cpp
     leak_detector_allocator_test.cpp
     manual_lifetime_test.cpp

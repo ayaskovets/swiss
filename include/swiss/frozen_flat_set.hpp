@@ -26,8 +26,9 @@ class frozen_flat_set final {
   using difference_type        = std::array<T, Size>::difference_type;
 
  public:
-  explicit constexpr frozen_flat_set(std::array<T, Size> keys,
-                                     Compare const & comp = Compare())
+  // NOLINTNEXTLINE(google-explicit-constructor)
+  constexpr frozen_flat_set(std::array<T, Size> keys,
+                            Compare const & comp = Compare())
       : keys_(keys), comp_(comp) {
     std::sort(keys_.begin(), keys_.end(), comp_);
   }

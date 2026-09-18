@@ -21,7 +21,6 @@ set(HEADERS
     include/swiss/concepts.hpp
     include/swiss/ebo.hpp
     include/swiss/frozen_flat_set.hpp
-    include/swiss/coroutine.hpp
     include/swiss/cpu_arch.hpp
     include/swiss/cpu_relax.hpp
     include/swiss/dynamic_extent.hpp

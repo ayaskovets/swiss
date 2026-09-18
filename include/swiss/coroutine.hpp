@@ -7,6 +7,8 @@ namespace swiss {
 
 /**
  * @brief Naive mock implementation of a coroutine task
+ * @warning NOT INTENDED to be used in production code anywhere outside tests
+ * and prototypes
  */
 class task final {
  public:

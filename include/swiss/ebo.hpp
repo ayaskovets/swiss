@@ -45,6 +45,9 @@ class ebo<T, true, CompileTimeValue> {
   T value_;
 };
 
+/**
+ * @brief EBO specialisation for the purely compile-time value case
+ */
 template <typename T, T CompileTimeValue>
 class ebo<T, false, CompileTimeValue> {
  public:

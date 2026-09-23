@@ -7,6 +7,10 @@
 
 namespace swiss {
 
+/**
+ * @brief Declarative way to do an noexcept operation when exiting a scope with
+ * an uncaught exception
+ */
 template <std::invocable T>
 class scope_fail final {
  private:

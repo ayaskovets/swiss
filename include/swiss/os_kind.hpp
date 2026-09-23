@@ -5,6 +5,9 @@
 
 namespace swiss {
 
+/**
+ * @brief OS family
+ */
 enum class os_kind : std::uint8_t {
   kWindows,
   kMacOS,

@@ -36,6 +36,10 @@ constexpr auto invoke_tail(
                      std::forward<Tail>(tail)...);
 }
 
+/**
+ * @brief Invoke a function and assign its return value to the first argument if
+ * the function return type is not void
+ */
 template <typename T, typename Callable, typename... Args>
 constexpr void assign_invoke_result_if_not_void(
     T & ret, Callable && callable,
@@ -48,6 +52,10 @@ constexpr void assign_invoke_result_if_not_void(
   }
 }
 
+/**
+ * @brief Poor man's std::move_only_function replacement. Wraps a callable that
+ * does not throw
+ */
 template <typename Ret, typename... Args>
 class noexcept_function : public std::function<Ret(Args...)> {
  private:

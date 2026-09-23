@@ -5,6 +5,9 @@
 
 namespace swiss {
 
+/**
+ * @brief CPU architecture
+ */
 enum class cpu_arch : std::uint8_t {
   kx86_64,
   kx86_32,

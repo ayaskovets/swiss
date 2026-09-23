@@ -6,6 +6,9 @@
 
 namespace swiss {
 
+/**
+ * @brief Wrapped value with fixed alignment with optional-like access
+ */
 template <typename T, std::size_t Alignment>
   requires(Alignment >= alignof(T))
 class alignas(Alignment) aligned {

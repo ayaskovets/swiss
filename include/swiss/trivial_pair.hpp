@@ -11,7 +11,7 @@ namespace swiss {
  * memcpy-copyable
  */
 template <typename T, typename U>
-  requires(std::is_trivial_v<T> && std::is_trivial_v<U>)
+  requires(std::is_trivially_copyable_v<T> && std::is_trivially_copyable_v<U>)
 struct trivial_pair {
   // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
   T first;

@@ -17,6 +17,7 @@ add_library(swiss::swiss ALIAS swiss)
 
 set(HEADERS
     include/swiss/aligned.hpp
+    include/swiss/badge.hpp
     include/swiss/chrono.hpp
     include/swiss/concepts.hpp
     include/swiss/ebo.hpp

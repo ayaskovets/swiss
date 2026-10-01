@@ -108,4 +108,63 @@ class noexcept_function : public std::function<Ret(Args...)> {
   }
 };
 
+/**
+ * @brief Wrapped member function call with a set object instance captured by
+ * reference
+ */
+template <typename T, typename Ret, typename... Args>
+class memfun final {
+ public:
+  constexpr memfun() noexcept = default;
+  constexpr memfun(T & object, Ret (T::*memfun)(Args...))
+      : object_(&object), memfun_(memfun) {
+    if (memfun_ == nullptr) {
+      throw std::invalid_argument("memfun::memfun(): null pointer to member");
+    }
+  }
+
+ public:
+  explicit constexpr operator bool() const noexcept { return memfun_; }
+
+  constexpr auto operator()(auto &&... args) const -> Ret {
+    if (!memfun_) [[unlikely]] {
+      throw std::runtime_error("memfun::operator()(): null pointer to member");
+    }
+
+    return (object_->*memfun_)(std::forward<decltype(args)>(args)...);
+  }
+
+ private:
+  T * object_;
+  Ret (T::*memfun_)(Args...){};
+};
+
+template <typename T, typename Ret, typename... Args>
+class const_memfun final {
+ public:
+  constexpr const_memfun() noexcept = default;
+  constexpr const_memfun(T const & object, Ret (T::*memfun)(Args...) const)
+      : object_(&object), memfun_(memfun) {
+    if (memfun_ == nullptr) {
+      throw std::invalid_argument(
+          "const_memfun::const_memfun(): null pointer to member");
+    }
+  }
+
+ public:
+  explicit constexpr operator bool() const noexcept { return memfun_; }
+
+  constexpr auto operator()(auto &&... args) const -> Ret {
+    if (!memfun_) [[unlikely]] {
+      throw std::runtime_error("memfun::operator()(): null pointer to member");
+    }
+
+    return (object_->*memfun_)(std::forward<decltype(args)>(args)...);
+  }
+
+ private:
+  T const * object_;
+  Ret (T::*memfun_)(Args...) const {};
+};
+
 }  // namespace swiss

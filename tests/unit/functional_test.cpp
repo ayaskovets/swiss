@@ -86,4 +86,25 @@ TEST(functional, noexcept_function) {
   EXPECT_EQ(copy(42), 0.F);
 }
 
+TEST(functional, memfun) {
+  std::vector<int> vec{1, 2, 3};
+
+  swiss::memfun const memfun(vec, &std::vector<int>::clear);
+  swiss::const_memfun const const_memfun(vec, &std::vector<int>::size);
+
+  EXPECT_TRUE(memfun);
+  EXPECT_TRUE(const_memfun);
+
+  EXPECT_EQ(vec.size(), 3);
+  EXPECT_EQ(vec.size(), const_memfun());
+
+  memfun();
+  EXPECT_EQ(vec.size(), 0);
+  EXPECT_EQ(vec.size(), const_memfun());
+
+  decltype(memfun) default_constructed{};
+  EXPECT_ANY_THROW(default_constructed());
+  EXPECT_FALSE(default_constructed);
+}
+
 }  // namespace tests::unit

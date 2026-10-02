@@ -58,16 +58,14 @@ TEST(functional, invoke_tail_class) {
 }
 
 TEST(functional, assign_invoke_result_if_not_void) {
-  auto const void_result_t = [](int) -> void {};
-
-  auto const int_result_t = [](int) -> int { return 2; };
-
   int ret = 0;
 
-  swiss::assign_invoke_result_if_not_void(ret, void_result_t, int{});
+  auto const void_result_type = [](int) -> void {};
+  swiss::assign_invoke_result_if_not_void(ret, void_result_type, int{});
   EXPECT_EQ(ret, 0);
 
-  swiss::assign_invoke_result_if_not_void(ret, int_result_t, int{});
+  auto const int_result_type = [](int) -> int { return 2; };
+  swiss::assign_invoke_result_if_not_void(ret, int_result_type, int{});
   EXPECT_EQ(ret, 2);
 }
 

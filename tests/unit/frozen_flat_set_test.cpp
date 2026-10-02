@@ -8,10 +8,10 @@
 namespace tests::unit {
 
 TEST(frozen_flat_set, concepts) {
-  using set_t = swiss::frozen_flat_set<int, 3>;
+  using set_type = swiss::frozen_flat_set<int, 3>;
 
-  static_assert(std::ranges::contiguous_range<set_t>);
-  static_assert(std::contiguous_iterator<set_t::iterator>);
+  static_assert(std::ranges::contiguous_range<set_type>);
+  static_assert(std::contiguous_iterator<set_type::iterator>);
 }
 
 TEST(frozen_flat_set, access) {

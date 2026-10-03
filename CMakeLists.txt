@@ -37,6 +37,7 @@ set(HEADERS
     include/swiss/rule_of_five_logger.hpp
     include/swiss/scope_exit.hpp
     include/swiss/scope_fail.hpp
+    include/swiss/sealable_stack.hpp
     include/swiss/static_pimpl.hpp
     include/swiss/strong_typedef.hpp
     include/swiss/trivial_pair.hpp

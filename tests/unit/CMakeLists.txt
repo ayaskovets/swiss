@@ -38,6 +38,7 @@ set(SOURCES
     predicates_test.cpp
     scope_exit_test.cpp
     scope_fail_test.cpp
+    sealable_stack_test.cpp
     static_pimpl_test.cpp
     strong_typedef_test.cpp
     trivial_pair_test.cpp

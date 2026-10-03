@@ -7,6 +7,7 @@ Checks: "*,
         -hicpp-named-parameter,
         -readability-magic-numbers,
         -hicpp-special-member-functions,
-        -hicpp-explicit-conversions"
+        -hicpp-explicit-conversions,
+        -altera-unroll-loops"
 FormatStyle: none
 WarningsAsErrors: "*"

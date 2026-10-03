@@ -12,6 +12,8 @@ TEST(frozen_flat_set, concepts) {
 
   static_assert(std::ranges::contiguous_range<set_type>);
   static_assert(std::contiguous_iterator<set_type::iterator>);
+  static_assert(std::ranges::contiguous_range<const set_type>);
+  static_assert(std::contiguous_iterator<set_type::const_iterator>);
 }
 
 TEST(frozen_flat_set, access) {

@@ -115,7 +115,8 @@ class noexcept_function : public std::function<Ret(Args...)> {
 template <typename T, typename Ret, typename... Args>
 class memfun final {
  public:
-  constexpr memfun() noexcept = default;
+  constexpr memfun() noexcept : object_(nullptr), memfun_(nullptr) {}
+
   constexpr memfun(T & object, Ret (T::*memfun)(Args...))
       : object_(&object), memfun_(memfun) {
     if (memfun_ == nullptr) {
@@ -136,13 +137,14 @@ class memfun final {
 
  private:
   T * object_;
-  Ret (T::*memfun_)(Args...){};
+  Ret (T::*memfun_)(Args...);
 };
 
 template <typename T, typename Ret, typename... Args>
 class const_memfun final {
  public:
-  constexpr const_memfun() noexcept = default;
+  constexpr const_memfun() noexcept : object_(nullptr), memfun_(nullptr) {}
+
   constexpr const_memfun(T const & object, Ret (T::*memfun)(Args...) const)
       : object_(&object), memfun_(memfun) {
     if (memfun_ == nullptr) {
@@ -164,7 +166,7 @@ class const_memfun final {
 
  private:
   T const * object_;
-  Ret (T::*memfun_)(Args...) const {};
+  Ret (T::*memfun_)(Args...) const;
 };
 
 }  // namespace swiss

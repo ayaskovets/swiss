@@ -24,8 +24,8 @@ class sealable_stack final {
   using const_reference = T const &;
   using pointer         = T *;
   using const_pointer   = T const *;
+  class iterator;
   class const_iterator;
-  using iterator        = const_iterator;
   using size_type       = std::size_t;
   using difference_type = std::ptrdiff_t;
 
@@ -46,13 +46,8 @@ class sealable_stack final {
   constexpr auto cend() const noexcept -> const_iterator { return {}; }
 
  public:
-  /**
-   * @note Nodes are allocated on the call site
-   */
-  constexpr auto try_push(node && node) noexcept -> bool = delete;
-
-  [[nodiscard]] constexpr auto try_push(node const & node) noexcept -> bool {
-    class node const * expected = top_.load(std::memory_order::acquire);
+  [[nodiscard]] constexpr auto try_push(node & node) noexcept -> bool {
+    class node * expected = top_.load(std::memory_order::acquire);
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-do-while)
     do {
       if (expected && expected->is_seal()) {
@@ -67,7 +62,7 @@ class sealable_stack final {
   }
 
   constexpr void seal() noexcept {
-    node const * expected = top_.load(std::memory_order::acquire);
+    node * expected = top_.load(std::memory_order::acquire);
 
     thread_local node seal;
     seal = node::kSeal(expected);
@@ -84,15 +79,57 @@ class sealable_stack final {
     return (top && top->is_seal()) ? top->next_ : top;
   }
 
+  constexpr auto top() noexcept -> node * {
+    node * const top = top_.load(std::memory_order::acquire);
+    return (top && top->is_seal()) ? top->next_ : top;
+  }
+
   [[nodiscard]] constexpr auto empty() const noexcept -> bool { return !top(); }
 
   [[nodiscard]] constexpr auto sealed() const noexcept -> bool {
-    node const * const top = top_.load(std::memory_order::acquire);
+    node * const top = top_.load(std::memory_order::acquire);
     return (top && top->is_seal());
   }
 
  private:
-  std::atomic<node const *> top_;
+  std::atomic<node *> top_;
+};
+
+template <typename T>
+class sealable_stack<T>::iterator final {
+ public:
+  using value_type      = T;
+  using reference       = T &;
+  using pointer         = T *;
+  using const_pointer   = T const *;
+  using const_reference = T const &;
+  using difference_type = std::ptrdiff_t;
+
+ public:
+  constexpr iterator() noexcept : node_(nullptr) {}
+  explicit constexpr iterator(node * node) noexcept : node_(node) {}
+
+ public:
+  constexpr auto operator==(iterator const & that) const noexcept
+      -> bool = default;
+
+  constexpr auto operator*() noexcept -> reference { return node_->value(); }
+  constexpr auto operator*() const noexcept -> reference {
+    return node_->value();
+  }
+
+  constexpr auto operator++() noexcept -> iterator & {
+    node_ = node_->next_;
+    return *this;
+  }
+  constexpr auto operator++(int) noexcept -> iterator {
+    iterator const copy(node_);
+    operator++();
+    return copy;
+  }
+
+ private:
+  node * node_;
 };
 
 template <typename T>
@@ -137,12 +174,12 @@ class sealable_stack<T>::const_iterator final {
 template <typename T>
 class sealable_stack<T>::node final {
  private:
-  static constexpr auto kSeal(node const * next) noexcept -> node {
+  static constexpr auto kSeal(node * next) noexcept -> node {
     return node(next);
   };
 
  private:
-  explicit constexpr node(node const * next) noexcept
+  explicit constexpr node(node * next) noexcept
       : value_(std::nullopt), next_(next) {}
 
  public:
@@ -158,10 +195,11 @@ class sealable_stack<T>::node final {
 
  public:
   constexpr auto value() const noexcept -> T const & { return *value_; }
+  constexpr auto value() noexcept -> T & { return *value_; }
 
  private:
   std::optional<T> value_;
-  mutable node const * next_;
+  node * next_;
 
  private:
   /**

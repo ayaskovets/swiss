@@ -1,6 +1,8 @@
 #pragma once
 
 #include <concepts>
+#include <utility>
+#include <variant>
 
 namespace swiss {
 
@@ -75,5 +77,44 @@ constexpr auto co_await_result_v(T && awaiter) -> decltype(auto) {
 template <typename T>
 using co_await_result_t =
     std::decay_t<decltype(co_await_result_v(std::declval<T>()))>;
+
+template <typename Needle, typename... Haystack>
+constexpr std::size_t count_in_pack =
+    []() -> std::size_t { return (std::is_same_v<Needle, Haystack> + ...); }();
+
+template <typename Needle, typename... Haystack>
+constexpr std::size_t index_in_pack = []() -> std::size_t {
+  static_assert((std::is_same_v<Needle, Haystack> || ...),
+                "index_in_pack: not found");
+
+  std::array const matches{std::is_same_v<Needle, Haystack>...};
+  for (std::size_t i = 0; i < sizeof...(Haystack); ++i) {
+    if (matches[i]) {
+      return i;
+    }
+  }
+
+  std::unreachable();
+}();
+
+/**
+ * @brief Check that types in parameter pack are unique
+ */
+template <typename... Ts>
+constexpr bool is_unique_pack =
+    (([]<typename Needle, typename... Haystack>() -> bool {
+       return (std::is_same_v<Needle, Haystack> + ...) == 1;
+     }.template operator()<Ts, Ts...>()) &&
+     ...);
+
+/**
+ * @brief Standard variant with unique types
+ */
+template <typename T>
+concept unique_variant = requires {
+  requires([]<typename... Args>(std::variant<Args...> *) -> bool {
+    return is_unique_pack<Args...>;
+  }(static_cast<T *>(nullptr)));
+};
 
 }  // namespace swiss

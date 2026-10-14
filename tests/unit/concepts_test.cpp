@@ -71,5 +71,23 @@ TEST(concepts, co_await_result_v) {
                                std::suspend_always>);
 }
 
+TEST(concepts, coint_in_pack) {
+  static_assert(swiss::count_in_pack<int, int, double, float, int *, int> == 2);
+}
+
+TEST(concepts, index_in_pack) {
+  static_assert(swiss::index_in_pack<int, int, double, float, int *, int> == 0);
+}
+
+TEST(concepts, is_unique_pack) {
+  static_assert(swiss::is_unique_pack<int, float>);
+  static_assert(!swiss::is_unique_pack<int, int, float>);
+}
+
+TEST(concepts, unique_variant) {
+  static_assert(swiss::unique_variant<std::variant<int, float>>);
+  static_assert(!swiss::unique_variant<std::variant<int, int, float>>);
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 }  // namespace tests::unit

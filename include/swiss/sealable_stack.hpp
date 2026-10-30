@@ -1,7 +1,6 @@
 #pragma once
 
 #include <atomic>
-#include <optional>
 #include <type_traits>
 #include <utility>
 
@@ -50,45 +49,38 @@ class sealable_stack final {
     class node * expected = top_.load(std::memory_order::acquire);
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-do-while)
     do {
-      if (expected && expected->is_seal()) {
+      if (node::is_seal(expected)) {
         return false;
       }
 
       node.next_ = expected;
     } while (!top_.compare_exchange_weak(expected, &node,
-                                         std::memory_order::acquire,
-                                         std::memory_order::relaxed));
+                                         std::memory_order::acq_rel,
+                                         std::memory_order::acquire));
     return true;
   }
 
   constexpr void seal() noexcept {
-    node * expected = top_.load(std::memory_order::acquire);
-
-    thread_local node seal;
-    seal = node::kSeal(expected);
-
-    while (!top_.compare_exchange_weak(expected, &seal,
-                                       std::memory_order::acquire,
+    node * expected = top_.load(std::memory_order::relaxed);
+    while (!top_.compare_exchange_weak(expected, node::seal(expected),
+                                       std::memory_order::release,
                                        std::memory_order::relaxed)) {
     }
   }
 
  public:
   constexpr auto top() const noexcept -> node const * {
-    node const * const top = top_.load(std::memory_order::acquire);
-    return (top && top->is_seal()) ? top->next_ : top;
+    return node::unseal(top_.load(std::memory_order::acquire));
   }
 
   constexpr auto top() noexcept -> node * {
-    node * const top = top_.load(std::memory_order::acquire);
-    return (top && top->is_seal()) ? top->next_ : top;
+    return node::unseal(top_.load(std::memory_order::acquire));
   }
 
   [[nodiscard]] constexpr auto empty() const noexcept -> bool { return !top(); }
 
   [[nodiscard]] constexpr auto sealed() const noexcept -> bool {
-    node * const top = top_.load(std::memory_order::acquire);
-    return (top && top->is_seal());
+    return node::is_seal(top_.load(std::memory_order::acquire));
   }
 
  private:
@@ -174,31 +166,39 @@ class sealable_stack<T>::const_iterator final {
 template <typename T>
 class sealable_stack<T>::node final {
  private:
-  static constexpr auto kSeal(node * next) noexcept -> node {
-    return node(next);
-  };
+  static constexpr std::uintptr_t kSealedBit = 1;
 
- private:
-  explicit constexpr node(node * next) noexcept
-      : value_(std::nullopt), next_(next) {}
+  static constexpr auto seal(node * next) noexcept -> node * {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return reinterpret_cast<node *>(reinterpret_cast<std::uintptr_t>(next) |
+                                    kSealedBit);
+  }
+
+  static constexpr auto unseal(node * next) noexcept -> node * {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    auto const address = reinterpret_cast<std::uintptr_t>(next) & ~kSealedBit;
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return address == 0 ? nullptr : reinterpret_cast<node *>(address);
+  }
+
+  [[nodiscard]] static constexpr auto is_seal(node const * ptr) noexcept
+      -> bool {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return (reinterpret_cast<std::uintptr_t>(ptr) & kSealedBit) != 0;
+  }
 
  public:
   template <typename... Args>
   explicit constexpr node(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>)
-      : value_(std::in_place, std::forward<Args>(args)...), next_(nullptr) {}
-
- private:
-  [[nodiscard]] constexpr auto is_seal() const noexcept -> bool {
-    return !value_.has_value();
-  }
+      : value_(std::forward<Args>(args)...), next_(nullptr) {}
 
  public:
-  constexpr auto value() const noexcept -> T const & { return *value_; }
-  constexpr auto value() noexcept -> T & { return *value_; }
+  constexpr auto value() const noexcept -> T const & { return value_; }
+  constexpr auto value() noexcept -> T & { return value_; }
 
  private:
-  std::optional<T> value_;
+  T value_;
   node * next_;
 
  private:

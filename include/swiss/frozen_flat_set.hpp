@@ -12,15 +12,15 @@ template <typename T, std::size_t Size, typename Compare = std::less<T>>
 class frozen_flat_set final {
  public:
   using value_type             = T;
-  using reference              = T &;
+  using reference              = T const &;
   using const_reference        = T const &;
-  using pointer                = T *;
+  using pointer                = T const *;
   using const_pointer          = T const *;
   using key_compare            = Compare;
   using value_compare          = Compare;
-  using iterator               = std::array<T, Size>::iterator;
+  using iterator               = std::array<T, Size>::const_iterator;
   using const_iterator         = std::array<T, Size>::const_iterator;
-  using reverse_iterator       = std::array<T, Size>::reverse_iterator;
+  using reverse_iterator       = std::array<T, Size>::const_reverse_iterator;
   using const_reverse_iterator = std::array<T, Size>::const_reverse_iterator;
   using size_type              = std::array<T, Size>::size_type;
   using difference_type        = std::array<T, Size>::difference_type;
@@ -29,7 +29,7 @@ class frozen_flat_set final {
   // NOLINTNEXTLINE(google-explicit-constructor)
   constexpr frozen_flat_set(std::array<T, Size> keys,
                             Compare const & comp = Compare())
-      : keys_(keys), comp_(comp) {
+      : keys_(std::move(keys)), comp_(comp) {
     std::sort(keys_.begin(), keys_.end(), comp_);
   }
 
@@ -86,25 +86,39 @@ class frozen_flat_set final {
   }
 
  public:
-  constexpr auto count(const_reference key) const noexcept -> std::size_t {
-    return std::count(keys_.begin(), keys_.end(), key);
+  constexpr auto count(const_reference key) const -> std::size_t {
+    auto const [first, last] = equal_range(key);
+    return static_cast<std::size_t>(last - first);
   }
 
-  constexpr auto contains(const_reference key) const noexcept -> bool {
-    return std::find(keys_.begin(), keys_.end(), key);
+  constexpr auto contains(const_reference key) const -> bool {
+    return std::binary_search(keys_.begin(), keys_.end(), key, comp_);
   }
 
  public:
-  constexpr auto lower_bound(const_reference key) noexcept -> iterator {
+  constexpr auto lower_bound(const_reference key) -> iterator {
     return std::lower_bound(keys_.begin(), keys_.end(), key, comp_);
   }
 
-  constexpr auto upper_bound(const_reference key) noexcept -> iterator {
+  constexpr auto lower_bound(const_reference key) const -> const_iterator {
+    return std::lower_bound(keys_.begin(), keys_.end(), key, comp_);
+  }
+
+  constexpr auto upper_bound(const_reference key) -> iterator {
     return std::upper_bound(keys_.begin(), keys_.end(), key, comp_);
   }
 
-  constexpr auto equal_range(const_reference key) noexcept
+  constexpr auto upper_bound(const_reference key) const -> const_iterator {
+    return std::upper_bound(keys_.begin(), keys_.end(), key, comp_);
+  }
+
+  constexpr auto equal_range(const_reference key)
       -> std::pair<iterator, iterator> {
+    return std::equal_range(keys_.begin(), keys_.end(), key, comp_);
+  }
+
+  constexpr auto equal_range(const_reference key) const
+      -> std::pair<const_iterator, const_iterator> {
     return std::equal_range(keys_.begin(), keys_.end(), key, comp_);
   }
 

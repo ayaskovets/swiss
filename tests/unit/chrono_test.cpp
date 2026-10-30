@@ -17,6 +17,8 @@ TEST(mocked_clock, smoke) {
 
   swiss::mocked_clock<>::set(now - std::chrono::seconds(1));
   EXPECT_EQ(swiss::mocked_clock<>::now(), now - std::chrono::seconds(1));
+
+  swiss::mocked_clock<>::sync();
 }
 
 TEST(tls_mocked_clock, smoke) {
@@ -34,6 +36,8 @@ TEST(tls_mocked_clock, smoke) {
   std::jthread const thread([now]() -> void {
     EXPECT_NE(swiss::tls_mocked_clock<>::now(), now - std::chrono::seconds(1));
   });
+
+  swiss::tls_mocked_clock<>::sync();
 }
 
 }  // namespace tests::unit

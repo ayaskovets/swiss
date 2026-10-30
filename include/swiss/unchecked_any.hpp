@@ -9,10 +9,9 @@ namespace swiss {
 
 /**
  * @brief Type-erased pimpl with value semantics
- * @note Noexcept if the copy allocation does not throw exceptions
  * @warning This type is different from std::any in that it does not check that
- * the requested type is the same as stored and subsequently does not throw any
- * exceptions. Converting the stored memory to an invalid type is UB
+ * the requested type is the same as stored. Converting the stored memory to an
+ * invalid type is UB
  */
 // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class unchecked_any {
@@ -21,15 +20,12 @@ class unchecked_any {
       : delete_(nullptr), data_(nullptr), clone_(nullptr) {}
 
   template <typename T>
-  explicit constexpr unchecked_any(T value) noexcept(
-      std::is_nothrow_move_constructible_v<T>)
+  explicit constexpr unchecked_any(T value)
       : unchecked_any(std::in_place_type<T>, std::move(value)) {}
 
   template <typename T, typename... Args>
     requires(!std::is_array_v<T>)
-  explicit constexpr unchecked_any(
-      std::in_place_type_t<T>,
-      Args &&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
+  explicit constexpr unchecked_any(std::in_place_type_t<T>, Args &&... args)
     requires(std::constructible_from<T, Args...>)
       : delete_([](void * ptr) noexcept -> void {
           // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
@@ -65,8 +61,7 @@ class unchecked_any {
 
  public:
   template <typename T>
-  constexpr auto operator=(T value) noexcept(
-      std::is_nothrow_move_constructible_v<T>) -> unchecked_any & {
+  constexpr auto operator=(T value) -> unchecked_any & {
     *this = unchecked_any(std::move(value));
     return *this;
   }
@@ -88,7 +83,8 @@ class unchecked_any {
   }
 
   template <typename T>
-  constexpr auto value() const noexcept -> T
+  constexpr auto value() const noexcept(std::is_nothrow_copy_constructible_v<T>)
+      -> T
     requires std::is_copy_constructible_v<T>
   {
     return *static_cast<T const *>(data_);

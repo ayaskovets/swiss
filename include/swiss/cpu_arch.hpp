@@ -23,7 +23,7 @@ enum class cpu_arch : std::uint8_t {
 #elif defined(__aarch64__) || defined(_M_ARM64)
 #define SWISS_CPU_ARCH kARM64
 #elif defined(__arm__) || defined(_M_ARM)
-#define SWISS_CPU_ARCH ARM32
+#define SWISS_CPU_ARCH kARM32
 #elif defined(__powerpc__)
 #define SWISS_CPU_ARCH kPowerPC
 #endif

@@ -43,10 +43,15 @@ class leak_detector_allocator : public std::allocator<T> {
       allocations.emplace(ptr, n);
     };
 
-    if constexpr (IsShared) {
-      store_allocation_to(shared_allocations_);
-    } else {
-      store_allocation_to(allocations_);
+    try {
+      if constexpr (IsShared) {
+        store_allocation_to(shared_allocations_);
+      } else {
+        store_allocation_to(allocations_);
+      }
+    } catch (...) {
+      std::allocator<T>::deallocate(ptr, n);
+      throw;
     }
 
     return ptr;

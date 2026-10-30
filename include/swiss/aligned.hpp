@@ -27,7 +27,7 @@ class alignas(Alignment) aligned {
       : value_(std::forward<Args>(args)...) {}
 
  public:
-  constexpr auto operator<=>(aligned const & that) const noexcept = default;
+  constexpr auto operator<=>(aligned const & that) const = default;
 
  public:
   constexpr auto operator*() noexcept -> reference { return value_; }

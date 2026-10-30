@@ -18,13 +18,13 @@ struct trivial_pair {
   U second;
   // NOLINTEND(misc-non-private-member-variables-in-classes)
 
-  constexpr auto operator<=>(trivial_pair const &) const noexcept = default;
+  constexpr auto operator<=>(trivial_pair const &) const = default;
 };
 
 template <typename T, typename U>
 constexpr auto make_trivial_pair(T && first, U && second)
-    -> trivial_pair<T, U> {
-  return trivial_pair(std::forward<T>(first), std::forward<U>(second));
+    -> trivial_pair<std::decay_t<T>, std::decay_t<U>> {
+  return {std::forward<T>(first), std::forward<U>(second)};
 }
 
 }  // namespace swiss

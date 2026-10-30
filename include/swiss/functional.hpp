@@ -41,9 +41,8 @@ constexpr auto invoke_tail(
  * the function return type is not void
  */
 template <typename T, typename Callable, typename... Args>
-constexpr void assign_invoke_result_if_not_void(
-    T & ret, Callable && callable,
-    Args &&... args) noexcept(std::is_nothrow_invocable_v<Callable, Args...>) {
+constexpr void assign_invoke_result_if_not_void(T & ret, Callable && callable,
+                                                Args &&... args) {
   if constexpr (std::is_same_v<std::invoke_result_t<Callable, Args...>, void>) {
     std::invoke(std::forward<Callable>(callable), std::forward<Args>(args)...);
   } else {
@@ -73,11 +72,11 @@ class noexcept_function : public std::function<Ret(Args...)> {
       -> noexcept_function & = default;
 
  public:
-  template <std::invocable<Args...> Callable>
+  template <typename Callable>
   // NOLINTNEXTLINE(google-explicit-constructor)
   constexpr noexcept_function(Callable && callable)
-    requires(std::is_nothrow_invocable_v<Callable, Args...> &&
-             !std::same_as<std::decay_t<decltype(callable)>, noexcept_function>)
+    requires(std::is_nothrow_invocable_r_v<Ret, Callable, Args...> &&
+             !std::same_as<std::decay_t<Callable>, noexcept_function>)
       : base(std::forward<Callable>(callable)) {
     if (!base::operator bool()) {
       throw std::invalid_argument(
@@ -88,10 +87,12 @@ class noexcept_function : public std::function<Ret(Args...)> {
   constexpr ~noexcept_function() = default;
 
  public:
-  constexpr auto operator=(auto && callable) -> noexcept_function &
-    requires(!std::same_as<std::decay_t<decltype(callable)>, noexcept_function>)
+  template <typename Callable>
+  constexpr auto operator=(Callable && callable) -> noexcept_function &
+    requires(std::is_nothrow_invocable_r_v<Ret, Callable, Args...> &&
+             !std::same_as<std::decay_t<Callable>, noexcept_function>)
   {
-    base const that(std::forward<decltype(callable)>(callable));
+    base that(std::forward<Callable>(callable));
 
     if (!that) {
       throw std::invalid_argument(
@@ -103,8 +104,8 @@ class noexcept_function : public std::function<Ret(Args...)> {
   }
 
  public:
-  auto operator()(auto &&... args) const noexcept -> Ret {
-    return base::operator()(std::forward<decltype(args)>(args)...);
+  auto operator()(Args... args) const noexcept -> Ret {
+    return base::operator()(std::forward<Args>(args)...);
   }
 };
 

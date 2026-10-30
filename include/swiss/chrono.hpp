@@ -42,7 +42,9 @@ class mocked_clock final {
   /**
    * @brief Set mocked clock to the now() value of the base clock
    */
-  static void sync() noexcept { set(Base::now()); }
+  static void sync() noexcept {
+    set(time_point{Base::now().time_since_epoch()});
+  }
 
  private:
   static inline std::atomic<rep> now_ = Base::now().time_since_epoch().count();
@@ -80,7 +82,9 @@ class tls_mocked_clock final {
   /**
    * @brief Set mocked clock to the now() value of the base clock
    */
-  static void sync() noexcept { set(Base::now()); }
+  static void sync() noexcept {
+    set(time_point{Base::now().time_since_epoch()});
+  }
 
  private:
   static thread_local inline time_point now_{Base::now().time_since_epoch()};

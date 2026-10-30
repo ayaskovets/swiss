@@ -28,12 +28,12 @@ class static_pimpl {
     requires(std::constructible_from<T, Args...>)
   explicit constexpr static_pimpl(Args &&... args) noexcept(
       std::is_nothrow_constructible_v<T, Args...>) {
-    std::construct_at(operator->(), std::forward<Args>(args)...);
+    std::construct_at(storage(), std::forward<Args>(args)...);
   }
 
   constexpr static_pimpl(static_pimpl const & that) noexcept(
       std::is_nothrow_copy_constructible_v<T>) {
-    std::construct_at(operator->(), that.operator*());
+    std::construct_at(storage(), that.operator*());
   }
 
   constexpr ~static_pimpl() noexcept {
@@ -58,7 +58,7 @@ class static_pimpl {
 
   constexpr static_pimpl(static_pimpl && that) noexcept(
       std::is_nothrow_move_constructible_v<T>) {
-    std::construct_at(operator->(), std::move(that.operator*()));
+    std::construct_at(storage(), std::move(that.operator*()));
   }
 
   constexpr auto operator=(static_pimpl && that) noexcept(
@@ -74,34 +74,44 @@ class static_pimpl {
   }
 
  public:
-  constexpr auto operator<=>(static_pimpl const & that) const noexcept -> auto {
+  constexpr auto operator<=>(static_pimpl const & that) const
+      noexcept(noexcept(std::declval<T const &>() <=>
+                        std::declval<T const &>())) -> auto {
     return operator*() <=> that.operator*();
   }
 
-  constexpr auto operator==(static_pimpl const & that) const noexcept -> bool {
+  constexpr auto operator==(static_pimpl const & that) const
+      noexcept(noexcept(static_cast<bool>(std::declval<T const &>() ==
+                                          std::declval<T const &>()))) -> bool {
     return operator*() == that.operator*();
   }
 
  public:
   constexpr auto operator*() noexcept -> reference {
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    return *std::launder(reinterpret_cast<T *>(impl_.data()));
+    return *operator->();
   }
   constexpr auto operator*() const noexcept -> const_reference {
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    return *std::launder(reinterpret_cast<T const *>(impl_.data()));
+    return *operator->();
   }
 
   constexpr auto operator->() noexcept -> pointer {
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    return std::launder(reinterpret_cast<T *>(impl_.data()));
+    return std::launder(storage());
   }
   constexpr auto operator->() const noexcept -> const_pointer {
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    return std::launder(reinterpret_cast<T const *>(impl_.data()));
+    return std::launder(storage());
   }
 
  private:
+  constexpr auto storage() noexcept -> pointer {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return reinterpret_cast<T *>(impl_.data());
+  }
+
+  constexpr auto storage() const noexcept -> const_pointer {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return reinterpret_cast<T const *>(impl_.data());
+  }
+
   alignas(Alignment) std::array<std::byte, Size> impl_;
 };
 

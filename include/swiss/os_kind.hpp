@@ -21,7 +21,7 @@ enum class os_kind : std::uint8_t {
 #elif __APPLE__ || __MACH__
 #define SWISS_OS_KIND kMacOS
 #elif __linux__
-#define SWISS_OS_KINDeturn kLinux
+#define SWISS_OS_KIND kLinux
 #elif __FreeBSD__
 #define SWISS_OS_KIND kFreeBSD
 #elif __unix || __unix__
